@@ -687,31 +687,6 @@ export const generateOfferLetterPDF = async (
   offerLetter: IOfferLetter
 ): Promise<Buffer> => {
   try {
-    // Fetch logo and convert to base64
-    // const logoUrl =
-    //   "https://media.cakeresume.com/image/upload/s--k9CQtNTA--/c_pad,fl_png8,h_400,w_400/v1691154551/e6idc2sh97xdrmuafkp7.png";
-    // const response = await axios.get(logoUrl, { responseType: "arraybuffer" });
-    // const logoBase64 = Buffer.from(response.data).toString("base64");
-
-    // const htmlContent = generateOfferLetterHTML(offerLetter, logoBase64);
-
-    // // Launch Puppeteer
-    // const browser = await puppeteer.launch({
-    //   headless: true,
-    //   executablePath: process.env.CHROME_BIN || undefined,
-    //   args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    // });
-
-    // const page = await browser.newPage();
-    // await page.setContent(htmlContent, { waitUntil: "networkidle0" });
-
-    // const pdfBuffer = await page.pdf({
-    //   format: "A4",
-    //   margin: { top: "40px", bottom: "60px", left: "40px", right: "40px" },
-    // });
-
-    // await browser.close();
-    // return Buffer.from(pdfBuffer);
 
     // Fetch logo and convert to base64
     const logoUrl =
@@ -763,24 +738,7 @@ export const generatePayslipPDF = async (
     const response = await axios.get(logoUrl, { responseType: "arraybuffer" });
     const logoBase64 = Buffer.from(response.data).toString("base64");
 
-    const htmlContent = generatePayslipHTML(offerLetter, logoBase64);
-
-    // Launch Puppeteer and generate PDF
-    // const browser = await puppeteer.launch({
-    //   headless: true,
-    //   executablePath: process.env.CHROME_BIN || undefined,
-    //   args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    // });
-    // const page = await browser.newPage();
-    // await page.setContent(htmlContent, { waitUntil: "networkidle0" });
-
-    // const pdfBuffer = await page.pdf({
-    //   format: "A4",
-    //   margin: { top: "40px", bottom: "60px", left: "40px", right: "40px" },
-    // });
-
-    // await browser.close();
-    // return Buffer.from(pdfBuffer);
+    const htmlContent = generatePayslipHTML(offerLetter, logoBase64); 
     const options = {
       format: "A4",
       printBackground: true,

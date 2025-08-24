@@ -15,6 +15,10 @@ const experienceLetterSchema = new Schema<IExperienceLetter>(
       type: String,
       default: "",
     },
+    month: {
+      type: String,
+      default: "",
+    },
     employeeDesignation: {
       type: String,
       default: "",

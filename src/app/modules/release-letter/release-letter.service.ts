@@ -53,9 +53,26 @@ async function processOneReleaseLetter(
     updatedData.status = IEmailStatus.FAILED;
   }
 
+  const monthNames = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+  ];
+
+  const currentMonthName = monthNames[new Date().getMonth()];
   const newOfferLetter = new OfferLetter({
     ...updatedData,
     generateByUser: authUser.userId,
+    month: currentMonthName,
   });
 
   await newOfferLetter.save();

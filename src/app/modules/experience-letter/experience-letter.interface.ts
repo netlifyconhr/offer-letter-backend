@@ -18,4 +18,5 @@ export interface IExperienceLetter extends Document {
   emailMessage: string;
   status: IEmailStatus;
   generateByUser: Schema.Types.ObjectId;
+  month: string;
 }

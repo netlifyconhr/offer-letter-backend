@@ -9,6 +9,7 @@ export interface IOfferLetter extends Document {
   employeeDateOfJoin: string;
   employeeCtc: string;
   companyLogo: string;
+  month: string;
   companyName: string;
   companyAddress: string;
   offerLetterDate: string;

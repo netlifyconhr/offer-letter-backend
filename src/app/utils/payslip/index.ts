@@ -306,7 +306,6 @@ export const generateOfferLetterPDF = async (
     const logoBase64 = Buffer.from(response.data).toString("base64");
 
     const htmlContent = generateOfferLetterHTML(offerLetter, logoBase64);
-
     const options = {
       format: "A4",
       printBackground: true,
@@ -388,24 +387,6 @@ function createTable(
   });
 }
 
-// Create Page 1 - Main Offer Letter
-function drawParallelogram(
-  doc: PDFKit.PDFDocument,
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  skew: number = 40,
-  fillColor: string = "#000000"
-) {
-  doc
-    .moveTo(x + skew, y) // Top-left (skewed)
-    .lineTo(x + width, y) // Top-right
-    .lineTo(x + width, y + height) // Bottom-right (skewed)
-    .lineTo(x, y + height) // Bottom-left
-    .closePath() // Close the shape
-    .fill(fillColor); // Fill with specified color
-}
 async function createPage1(
   doc: PDFKit.PDFDocument,
   offerLetter: IOfferLetter,

@@ -16,6 +16,10 @@ const releaseLetterSchema = new Schema<IReleaseLetter>(
       enum: ["Male", "Female", "Other"],
       default: "Other",
     },
+    month: {
+      type: String,
+      default: "",
+    },
     employeeAddress: {
       type: String,
       default: "",

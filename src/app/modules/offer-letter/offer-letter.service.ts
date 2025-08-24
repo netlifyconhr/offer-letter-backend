@@ -11,6 +11,7 @@ import { IEmailStatus } from "../release-letter/release-letter.interface";
 import { IBulkProcessStatus } from "../socket/socket-manager";
 import { IOfferLetter } from "./offer-letter.interface";
 import OfferLetter from "./offer-letter.model";
+import { monthNames } from "../../../constant";
 const processStatuses = new Map<string, IBulkProcessStatus>();
 
 const limit = pLimit(1); // Max 10 concurrent emails
@@ -247,9 +248,12 @@ export const offerLetterService = {
       updatedData.status = IEmailStatus.FAILED;
     }
 
+    const currentMonthName = monthNames[new Date().getMonth()];
+
     const newOfferLetter = new OfferLetter({
       ...updatedData,
       generateByUser: authUser.userId,
+      month: currentMonthName,
     });
 
     await newOfferLetter.save();

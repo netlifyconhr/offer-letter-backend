@@ -7,6 +7,7 @@ import { IEmailStatus, IExperienceLetter } from "./experience-letter.interface";
 import ExperienceLetter from "./experience-letter.model";
 import { generateExperienceLetterPDF } from "../../utils/woodrock/experience-letter";
 import Organization from "../organization/organization.model";
+import { monthNames } from "../../../constant";
 
 const limit = pLimit(10); // Max 10 concurrent emails
 async function processOneExperienceLetter(
@@ -50,9 +51,12 @@ async function processOneExperienceLetter(
     updatedData.status = IEmailStatus.FAILED;
   }
 
+  const currentMonthName = monthNames[new Date().getMonth()];
+
   const newOfferLetter = new ExperienceLetter({
     ...updatedData,
     generateByUser: authUser.userId,
+    month: currentMonthName,
   });
 
   await newOfferLetter.save();

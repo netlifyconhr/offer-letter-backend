@@ -27,5 +27,4 @@ router.get(
 
   releaseLetterController.getOfferLetterAll
 );
-
 export const ReleaseLetterRoutes = router;

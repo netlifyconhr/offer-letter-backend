@@ -19,4 +19,5 @@ export interface IReleaseLetter extends Document {
   emailMessage: string;
   status: IEmailStatus;
   generateByUser: Schema.Types.ObjectId;
+  month: string;
 }

@@ -32,6 +32,10 @@ const offerLetterSchema = new Schema<IOfferLetter>(
       type: String,
       default: "",
     },
+    month: {
+      type: String,
+      default: "",
+    },
     companyName: {
       type: String,
       default: "",

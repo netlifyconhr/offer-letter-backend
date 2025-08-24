@@ -31,6 +31,13 @@ router.post(
   offerLetterController.createBulkOfferLetter
 );
 router.get(
+  "/dashboard-count",
+  auth(UserRole.ADMIN, UserRole.USER),
+
+  offerLetterController.getOfferLetterAll
+);
+
+router.get(
   "/",
   auth(UserRole.ADMIN, UserRole.USER),
 

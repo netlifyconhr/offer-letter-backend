@@ -130,24 +130,6 @@ export const generateExperienceLetterPDF = async (
 
     const htmlContent = generateExperienceLetterHTML(offerLetter, logoBase64);
 
-    // // Launch Puppeteer
-    // const browser = await puppeteer.launch({
-    //   headless: true,
-    //   executablePath: "/usr/bin/chromium", // Use the installed Chromium
-    //   args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    // });
-
-    // const page = await browser.newPage();
-    // await page.setContent(htmlContent, { waitUntil: "networkidle0" });
-
-    // const pdfBuffer = await page.pdf({
-    //   format: "A4",
-    //   margin: { top: "40px", bottom: "60px", left: "40px", right: "40px" },
-    // });
-
-    // await browser.close();
-    // return Buffer.from(pdfBuffer);
-
     const options = {
       format: "A4",
       printBackground: true,
