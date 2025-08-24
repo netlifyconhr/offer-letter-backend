@@ -31,6 +31,10 @@ const offerLetterSchema = new mongoose_1.Schema({
         type: String,
         default: "",
     },
+    month: {
+        type: String,
+        default: "",
+    },
     companyName: {
         type: String,
         default: "",

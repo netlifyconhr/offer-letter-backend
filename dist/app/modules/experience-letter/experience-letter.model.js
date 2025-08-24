@@ -15,6 +15,10 @@ const experienceLetterSchema = new mongoose_1.Schema({
         type: String,
         default: "",
     },
+    month: {
+        type: String,
+        default: "",
+    },
     employeeDesignation: {
         type: String,
         default: "",

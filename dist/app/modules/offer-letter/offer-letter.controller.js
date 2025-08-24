@@ -52,6 +52,7 @@ const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const XLSX = __importStar(require("xlsx"));
 const appError_1 = __importDefault(require("../../errors/appError"));
+const emailHelper_1 = require("../../utils/emailHelper");
 exports.offerLetterController = {
     // async getAll() {
     //   return catchAsync(async (req, res) => {
@@ -124,21 +125,32 @@ exports.offerLetterController = {
             if (!file) {
                 throw new appError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Empty or invalid Excel file");
             }
+            const isValid = yield emailHelper_1.EmailHelper.verifyEmailCredentials();
+            if (!isValid) {
+                console.error("Cannot send email: Invalid credentials.");
+                return (0, sendResponse_1.default)(res, {
+                    statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST, // Or StatusCodes.BAD_REQUEST
+                    success: false,
+                    message: "Failed to send offer letters: Invalid email credentials. Please contact admin.",
+                    data: "INVALID_MAIL_CONFIG",
+                });
+            }
+            // Proceed if credentials are valid
             const workbook = XLSX.read(file.buffer, {
                 type: "buffer",
-                cellDates: true, // Important: forces cells to be parsed as Date objects
+                cellDates: true,
             });
             const sheetName = workbook.SheetNames[0];
             const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
-                defval: "", // Keeps empty cells instead of skipping
-                raw: false, // Converts dates and numbers properly
+                defval: "",
+                raw: false,
             });
             const results = yield offer_letter_service_1.offerLetterService.createBulkOfferLetters(rows, req.user);
             console.log(rows, "rows");
             (0, sendResponse_1.default)(res, {
                 statusCode: http_status_codes_1.StatusCodes.OK,
                 success: true,
-                message: "Bulk offer letters processed",
+                message: "Bulk offer letters processed and emails sent successfully.",
                 data: results,
             });
         });

@@ -19,6 +19,7 @@ const emailHelper_1 = require("../../utils/emailHelper");
 const experience_letter_interface_1 = require("./experience-letter.interface");
 const experience_letter_model_1 = __importDefault(require("./experience-letter.model"));
 const experience_letter_1 = require("../../utils/woodrock/experience-letter");
+const constant_1 = require("../../../constant");
 const limit = (0, p_limit_1.default)(10); // Max 10 concurrent emails
 function processOneExperienceLetter(offerLetterData, authUser) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -45,7 +46,8 @@ function processOneExperienceLetter(offerLetterData, authUser) {
             console.error(`Failed for ${offerLetterData.employeeEmail}:`, error);
             updatedData.status = experience_letter_interface_1.IEmailStatus.FAILED;
         }
-        const newOfferLetter = new experience_letter_model_1.default(Object.assign(Object.assign({}, updatedData), { generateByUser: authUser.userId }));
+        const currentMonthName = constant_1.monthNames[new Date().getMonth()];
+        const newOfferLetter = new experience_letter_model_1.default(Object.assign(Object.assign({}, updatedData), { generateByUser: authUser.userId, month: currentMonthName }));
         yield newOfferLetter.save();
         return {
             email: offerLetterData.employeeEmail,

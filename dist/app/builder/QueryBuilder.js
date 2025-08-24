@@ -20,7 +20,7 @@ class QueryBuilder {
         if (searchTerm) {
             this.modelQuery = this.modelQuery.find({
                 $or: searchableFields.map((field) => ({
-                    [field]: { $regex: searchTerm, $options: 'i' },
+                    [field]: { $regex: searchTerm, $options: "i" },
                 })),
             });
         }
@@ -29,14 +29,26 @@ class QueryBuilder {
     filter() {
         const queryObj = Object.assign({}, this.query); // copy
         // Filtering
-        const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+        const excludeFields = ["searchTerm", "sort", "limit", "page", "fields"];
         excludeFields.forEach((el) => delete queryObj[el]);
+        if (queryObj.createdAt && typeof queryObj.createdAt === "string") {
+            const date = new Date(queryObj.createdAt);
+            const nextDay = new Date(date);
+            nextDay.setDate(date.getDate() + 1);
+            queryObj.createdAt = {
+                $gte: date,
+                $lt: nextDay,
+            };
+        }
+        if (queryObj.month) {
+            queryObj.month = { $regex: new RegExp(`^${queryObj.month}$`, "i") };
+        }
         this.modelQuery = this.modelQuery.find(queryObj);
         return this;
     }
     sort() {
         var _a, _b, _c;
-        const sort = ((_c = (_b = (_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.sort) === null || _b === void 0 ? void 0 : _b.split(',')) === null || _c === void 0 ? void 0 : _c.join(' ')) || '-createdAt';
+        const sort = ((_c = (_b = (_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.sort) === null || _b === void 0 ? void 0 : _b.split(",")) === null || _c === void 0 ? void 0 : _c.join(" ")) || "-createdAt";
         this.modelQuery = this.modelQuery.sort(sort);
         return this;
     }
@@ -50,7 +62,7 @@ class QueryBuilder {
     }
     fields() {
         var _a, _b, _c;
-        const fields = ((_c = (_b = (_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.fields) === null || _b === void 0 ? void 0 : _b.split(',')) === null || _c === void 0 ? void 0 : _c.join(' ')) || '-__v';
+        const fields = ((_c = (_b = (_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.fields) === null || _b === void 0 ? void 0 : _b.split(",")) === null || _c === void 0 ? void 0 : _c.join(" ")) || "-__v";
         this.modelQuery = this.modelQuery.select(fields);
         return this;
     }

@@ -23,6 +23,7 @@ const generateOrderInvoicePDF_1 = require("../../utils/generateOrderInvoicePDF")
 const offer_letter_1 = require("../../utils/offer-letter");
 const release_letter_interface_1 = require("../release-letter/release-letter.interface");
 const offer_letter_model_1 = __importDefault(require("./offer-letter.model"));
+const constant_1 = require("../../../constant");
 const processStatuses = new Map();
 const limit = (0, p_limit_1.default)(1); // Max 10 concurrent emails
 exports.offerLetterService = {
@@ -189,7 +190,8 @@ exports.offerLetterService = {
                 console.error(`Failed for ${offerLetterData.employeeEmail}:`, error);
                 updatedData.status = release_letter_interface_1.IEmailStatus.FAILED;
             }
-            const newOfferLetter = new offer_letter_model_1.default(Object.assign(Object.assign({}, updatedData), { generateByUser: authUser.userId }));
+            const currentMonthName = constant_1.monthNames[new Date().getMonth()];
+            const newOfferLetter = new offer_letter_model_1.default(Object.assign(Object.assign({}, updatedData), { generateByUser: authUser.userId, month: currentMonthName }));
             yield newOfferLetter.save();
             return {
                 email: offerLetterData.employeeEmail,
