@@ -55,7 +55,7 @@ function bootstrap() {
             // Initialize Socket.IO with CORS config
             const io = new socket_io_1.Server(httpServer, {
                 cors: {
-                    origin: ["http://localhost:3000", "http://localhost:5173"],
+        origin: ["http://localhost:3000", "http://localhost:5173","https://netlifycon-hr.in"],
                     methods: ["GET", "POST"],
                     credentials: true,
                 },
