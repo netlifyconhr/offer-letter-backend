@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import { Server as SocketIOServer } from "socket.io";
 import app from "./app";
 import config from "./app/config";
-import { setSocketIO } from "./app/socket/socket"; // optional, explained below
 
 let server: Server | null = null;
 
@@ -39,31 +38,7 @@ async function bootstrap() {
     // Create HTTP server from Express app
     const httpServer = http.createServer(app);
 
-    // Initialize Socket.IO with CORS config
-    const io = new SocketIOServer(httpServer, {
-      cors: {
-        origin: ["http://localhost:3000", "http://localhost:5173","https://netlifycon-hr.in"],
-        methods: ["GET", "POST"],
-        credentials: true,
-      },
-    });
-
-    // Optional: make `io` available globally via custom setter
-    setSocketIO(io);
-
-    // Define basic socket events
-    io.on("connection", (socket) => {
-      console.log(`🟢 Socket connected: ${socket.id}`);
-
-      socket.on("message", (data) => {
-        console.log("📨 Received message:", data);
-        io.emit("message", data);
-      });
-
-      socket.on("disconnect", () => {
-        console.log(`🔴 Socket disconnected: ${socket.id}`);
-      });
-    });
+  
 
     // Start server
     server = httpServer.listen(config.port, () => {
@@ -91,4 +66,5 @@ async function bootstrap() {
 }
 
 bootstrap();
+
 
