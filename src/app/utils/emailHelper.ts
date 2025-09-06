@@ -1,10 +1,11 @@
 import * as fs from "fs";
 import nodemailer from "nodemailer";
 import * as path from "path";
+import * as Util from "util";
 import config from "../config";
 import { IEmailStatus } from "../modules/release-letter/release-letter.interface";
 const ReadFile = Util.promisify(fs.readFile);
-import * as Util from "util";
+
 import Handlebars from "handlebars";
 
 
@@ -168,4 +169,5 @@ export const EmailHelper = {
   sendEmailFromAdmin,
   verifyEmailCredentials
 };
+
 
