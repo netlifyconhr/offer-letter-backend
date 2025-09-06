@@ -3,9 +3,10 @@ import nodemailer from "nodemailer";
 import * as path from "path";
 import config from "../config";
 import { IEmailStatus } from "../modules/release-letter/release-letter.interface";
-const Util = require("util");
 const ReadFile = Util.promisify(fs.readFile);
-const Handlebars = require("handlebars");
+import * as Util from "util";
+import Handlebars from "handlebars";
+
 
 const sendEmail = async (
   email: string,
@@ -167,3 +168,4 @@ export const EmailHelper = {
   sendEmailFromAdmin,
   verifyEmailCredentials
 };
+
