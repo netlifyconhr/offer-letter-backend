@@ -11,9 +11,8 @@ import { IBulkProcessStatus } from "../socket/socket-manager";
 import { IOfferLetter } from "./offer-letter.interface";
 import OfferLetter from "./offer-letter.model";
 import { monthNames } from "../../../constant";
+
 const processStatuses = new Map<string, IBulkProcessStatus>();
- const pLimit = (await import("p-limit")).default;
-  const limit = pLimit(1);
 
 export const offerLetterService = {
   async getOfferLetterAll(query: Record<string, unknown>) {
@@ -27,17 +26,16 @@ export const offerLetterService = {
     const result = await offerLetterQuery.modelQuery;
     const meta = await offerLetterQuery.countTotal();
 
-    return {
-      meta,
-      result,
-    };
+    return { meta, result };
   },
+
   async getOfferLetterById(id: string) {
     const offerLetter = await OfferLetter.findById(id);
     if (!offerLetter) {
       throw new AppError(StatusCodes.NOT_FOUND, "Offer letter not found!");
     }
-    const logoBase64 = ""; // you can fetch actual logo if needed
+
+    const logoBase64 = ""; // You can fetch actual logo if needed
     const htmlContent = generateOfferLetterHTML(
       offerLetter as IOfferLetter,
       logoBase64
@@ -45,8 +43,8 @@ export const offerLetterService = {
 
     return htmlContent;
   },
+
   async acknowledgeById(employeeEmail: string) {
-    // First, check if the offer letter exists and its current acknowledge status
     const offerLetter = await OfferLetter.findOne({ employeeEmail });
 
     if (!offerLetter) {
@@ -69,7 +67,6 @@ export const offerLetterService = {
       };
     }
 
-    // Update acknowledge to true
     offerLetter.acknowledge = true;
     offerLetter.dateOfAcknowledge = new Date();
 
@@ -80,27 +77,26 @@ export const offerLetterService = {
         "Thank you for your confirmation. Your acknowledgement has been recorded successfully.",
     };
   },
+
   async createOfferLetter(
     offerLetterData: IOfferLetter,
     authUser: IJwtPayload
   ) {
-    const updatedData: IOfferLetter = {
-      ...offerLetterData,
-    };
+    const updatedData: IOfferLetter = { ...offerLetterData };
 
-    if ((offerLetterData.status = IEmailStatus.SENT)) {
+    if (offerLetterData.status === IEmailStatus.SENT) {
       const emailContent = await EmailHelper.createEmailContent(
         //@ts-ignore
         { userName: offerLetterData.employeeEmail || "", ...updatedData },
         "offerLetter"
       );
+
       const pdfBuffer = await generateOfferLetterPDFByPdfKIt(offerLetterData);
 
       const attachment = {
         filename: `offerletter_${offerLetterData.employeeEmail}.pdf`,
-
         content: pdfBuffer,
-        encoding: "base64", // if necessary
+        encoding: "base64",
       };
 
       const result = await EmailHelper.sendEmail(
@@ -111,24 +107,27 @@ export const offerLetterService = {
         attachment
       );
 
-      if (result.status === IEmailStatus.SENT) {
-        updatedData.status = IEmailStatus.SENT;
-      } else {
-        updatedData.status = IEmailStatus.FAILED;
-      }
+      updatedData.status =
+        result.status === IEmailStatus.SENT
+          ? IEmailStatus.SENT
+          : IEmailStatus.FAILED;
     }
+
     const newOfferLetter = new OfferLetter({
       ...updatedData,
       generateByUser: authUser.userId,
     });
 
-    const result = await newOfferLetter.save();
-    return result;
+    return await newOfferLetter.save();
   },
+
   async createBulkOfferLetters(
     offerLetters: IOfferLetter[],
     authUser: IJwtPayload
   ) {
+    const pLimit = (await import("p-limit")).default;
+    const limit = pLimit(1); // Max 1 at a time
+
     const results = await Promise.all(
       offerLetters.map((data) =>
         limit(() => this.processOneOfferLetter(data, authUser))
@@ -137,20 +136,21 @@ export const offerLetterService = {
 
     return results;
   },
-  // Async processing function
+
   async processOfferLettersAsync(
     offerLetters: IOfferLetter[],
     authUser: IJwtPayload,
     processId: string
   ) {
+    const pLimit = (await import("p-limit")).default;
+    const limit = pLimit(1);
+
     const status = processStatuses.get(processId);
     if (!status) return;
 
-    // Update status to processing
     status.status = "PROCESSING";
 
     try {
-      console.log(processStatuses, processId, status, "dshgfh");
       const results = await Promise.all(
         offerLetters.map((data) =>
           limit(() =>
@@ -170,7 +170,7 @@ export const offerLetterService = {
       }
     }
   },
-  // New socket-enabled bulk function
+
   async createBulkOfferLettersWithSocket(
     offerLetters: IOfferLetter[],
     authUser: IJwtPayload
@@ -178,7 +178,6 @@ export const offerLetterService = {
     const processId = uuidv4();
     const total = offerLetters.length;
 
-    // Initialize process status
     const initialStatus: IBulkProcessStatus = {
       processId,
       total,
@@ -192,7 +191,6 @@ export const offerLetterService = {
 
     processStatuses.set(processId, initialStatus);
 
-    // Start processing asynchronously (don't await)
     this.processOfferLettersAsync(offerLetters, authUser, processId).catch(
       (error) => {
         console.error(`Process ${processId} failed:`, error);
@@ -225,7 +223,7 @@ export const offerLetterService = {
       const attachment = {
         filename: `offerletter_${offerLetterData.employeeEmail}.pdf`,
         content: pdfBuffer,
-        encoding: "base64", // if necessary
+        encoding: "base64",
       };
 
       const emailResult = await EmailHelper.sendEmail(
@@ -262,70 +260,14 @@ export const offerLetterService = {
       status: updatedData.status,
     };
   },
-  async processOneOfferLetterProcessId(
-    offerLetterData: IOfferLetter,
-    authUser: IJwtPayload,
-    processId: string
-  ) {
-    const updatedData: IOfferLetter = { ...offerLetterData };
-    let resultStatus = IEmailStatus.FAILED;
 
-    try {
-      // await new Promise((res) => setTimeout(res, 1000));
-      const emailContent = await EmailHelper.createEmailContent(
-        //@ts-ignore
-        { userName: offerLetterData.employeeEmail || "", ...updatedData },
-        "offerLetter"
-      );
-
-      const pdfBuffer = await generateOfferLetterPDFByPdfKIt(offerLetterData);
-
-      const attachment = {
-        filename: `offerletter_${offerLetterData.employeeEmail}.pdf`,
-        content: pdfBuffer,
-        encoding: "base64", // if necessary
-      };
-
-      const emailResult = await EmailHelper.sendEmail(
-        //@ts-ignore
-        offerLetterData.employeeEmail,
-        emailContent,
-        "Offer letter confirmed!",
-        attachment
-      );
-
-      resultStatus =
-        emailResult.status === IEmailStatus.SENT
-          ? IEmailStatus.SENT
-          : IEmailStatus.FAILED;
-
-      updatedData.status = resultStatus;
-    } catch (error) {
-      console.error(`Failed for ${offerLetterData.employeeEmail}:`, error);
-      updatedData.status = IEmailStatus.FAILED;
-    }
-
-    const newOfferLetter = new OfferLetter({
-      ...updatedData,
-      generateByUser: authUser.userId,
-    });
-
-    await newOfferLetter.save();
-
-    return {
-      email: offerLetterData.employeeEmail,
-      status: updatedData.status,
-    };
-  },
   async processOneOfferLetterWithSocket(
     offerLetterData: IOfferLetter,
     authUser: IJwtPayload,
     processId: string
   ): Promise<{ email: string; status: IEmailStatus }> {
-    console.log("call", offerLetterData);
     const result = await this.processOneOfferLetter(offerLetterData, authUser);
-    console.log(result, "result");
-    // Update process status after processing each email
+
     this.updateProcessStatus(
       processId,
       offerLetterData.employeeEmail,
@@ -335,7 +277,6 @@ export const offerLetterService = {
     return result;
   },
 
-  // Helper function to update process status
   updateProcessStatus(processId: string, email: string, status: IEmailStatus) {
     const processStatus = processStatuses.get(processId);
     if (!processStatus) return;
@@ -351,53 +292,37 @@ export const offerLetterService = {
     processStatus.pending =
       processStatus.total - processStatus.sent - processStatus.failed;
 
-    // Update status
     if (processStatus.pending === 0) {
       processStatus.status =
         processStatus.failed === processStatus.total ? "FAILED" : "COMPLETED";
-    }
 
-    // If process is complete, emit completion event
-    if (processStatus.pending === 0) {
-      // Clean up after 5 minutes
       setTimeout(() => {
         processStatuses.delete(processId);
       }, 300000);
     }
   },
 
-  // Get process status
   getProcessStatus(processId: string): IBulkProcessStatus | null {
     return processStatuses.get(processId) || null;
   },
 
-  // Get all active processes
   getAllActiveProcesses(): IBulkProcessStatus[] {
     return Array.from(processStatuses.values());
   },
 
-  // Cancel/delete a process
   cancelProcess(processId: string): boolean {
-    const deleted = processStatuses.delete(processId);
-
-    return deleted;
+    return processStatuses.delete(processId);
   },
 
-  // Clean up expired processes (call this periodically)
   cleanupExpiredProcesses() {
-    const now = Date.now();
-    const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+    const maxProcesses = 100;
 
-    for (const [processId, status] of processStatuses.entries()) {
-      if (status.status === "COMPLETED" || status.status === "FAILED") {
-        // Check if process is older than maxAge (you'd need to add timestamp to status)
-        // For now, just clean up completed processes after some time
-        if (processStatuses.size > 100) {
-          // Prevent memory bloat
+    if (processStatuses.size > maxProcesses) {
+      for (const [processId, status] of processStatuses.entries()) {
+        if (status.status === "COMPLETED" || status.status === "FAILED") {
           processStatuses.delete(processId);
         }
       }
     }
   },
 };
-
