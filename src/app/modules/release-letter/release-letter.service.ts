@@ -1,4 +1,3 @@
-import pLimit from "p-limit";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { EmailHelper } from "../../utils/emailHelper";
 import { generateReleaseLetterPDF } from "../../utils/woodrock/release-letter";
@@ -11,7 +10,6 @@ import {
   default as ReleaseLetter,
 } from "./release-letter.model";
 
-const limit = pLimit(10); // Max 10 concurrent emails
 async function processOneReleaseLetter(
   offerLetterData: IReleaseLetter,
   authUser: IJwtPayload
@@ -104,6 +102,8 @@ export const releaseLetterService = {
     offerLetters: IReleaseLetter[],
     authUser: IJwtPayload
   ) {
+     const pLimit = (await import("p-limit")).default;
+    const limit = pLimit(1); // Max 1 at a time
     const results = await Promise.all(
       offerLetters.map((data) =>
         limit(() => processOneReleaseLetter(data, authUser))

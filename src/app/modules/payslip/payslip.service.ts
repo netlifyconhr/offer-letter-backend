@@ -1,5 +1,4 @@
 import { StatusCodes } from "http-status-codes";
-import pLimit from "p-limit";
 import QueryBuilder from "../../builder/QueryBuilder";
 import AppError from "../../errors/appError";
 import { EmailHelper } from "../../utils/emailHelper";
@@ -8,8 +7,6 @@ import { IJwtPayload } from "../auth/auth.interface";
 import { IPaySlip } from "./payslip.interface";
 import PaySlip from "./payslip.model";
 import { IEmailStatus } from "../release-letter/release-letter.interface";
-
-const limit = pLimit(10); // Max 10 concurrent emails
 async function processOneOfferLetter(
   offerLetterData: IPaySlip,
   authUser: IJwtPayload
@@ -155,6 +152,8 @@ export const payslipService = {
     offerLetters: IPaySlip[],
     authUser: IJwtPayload
   ) {
+     const pLimit = (await import("p-limit")).default;
+    const limit = pLimit(1); // Max 1 at a time
     const results = await Promise.all(
       offerLetters.map((data) =>
         limit(() => {
