@@ -13,17 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.offerLetterService = void 0;
-const http_status_codes_1 = require("http-status-codes");
-const p_limit_1 = __importDefault(require("p-limit"));
-const uuid_1 = require("uuid");
-const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
-const appError_1 = __importDefault(require("../../errors/appError"));
-const emailHelper_1 = require("../../utils/emailHelper");
-const generateOrderInvoicePDF_1 = require("../../utils/generateOrderInvoicePDF");
-const offer_letter_1 = require("../../utils/offer-letter");
-const release_letter_interface_1 = require("../release-letter/release-letter.interface");
-const offer_letter_model_1 = __importDefault(require("./offer-letter.model"));
-const constant_1 = require("../../../constant");
+import { StatusCodes } from "http-status-codes";
+import pLimit from "p-limit";
+import { v4 as uuidv4 } from "uuid";
+import QueryBuilder from "../../builder/QueryBuilder.js";
+import AppError from "../../errors/appError.js";
+import { EmailHelper } from "../../utils/emailHelper.js";
+import { generateOfferLetterHTML } from "../../utils/generateOrderInvoicePDF.js";
+import { generateOfferLetterPDFByPdfKIt } from "../../utils/offer-letter.js";
+import { IEmailStatus } from "../release-letter/release-letter.interface.js";
+import OfferLetterModel from "./offer-letter.model.js";
+import { monthNames } from "../../../constant.js";
 const processStatuses = new Map();
 const limit = (0, p_limit_1.default)(1); // Max 10 concurrent emails
 exports.offerLetterService = {
