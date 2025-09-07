@@ -1,0 +1,38 @@
+import { Router } from "express";
+import auth from "../../middleware/auth";
+import { UserRole } from "../user/user.interface";
+import { offerLetterController } from "./offer-letter.controller";
+import multer from "multer";
+
+const router = Router();
+
+const storage = multer.memoryStorage();
+const multerUpload = multer({ storage });
+
+router.post(
+  "/upload-offer-letter-csv",
+  auth(UserRole.ADMIN, UserRole.USER),
+  multerUpload.single("multipleOfferLetterCsv"),
+
+  offerLetterController.createBulkOfferLetter
+);
+router.get(
+  "/dashboard-count",
+  auth(UserRole.ADMIN, UserRole.USER),
+
+  offerLetterController.getOfferLetterAll
+);
+
+router.get(
+  "/",
+  auth(UserRole.ADMIN, UserRole.USER),
+
+  offerLetterController.getOfferLetterAll
+);
+
+router.post(
+  "/offer-acknowledge/:employeeEmail",
+  offerLetterController.acknowledgeById
+);
+
+export const OfferLetterRoutes = router;
