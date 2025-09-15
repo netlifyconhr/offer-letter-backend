@@ -1,16 +1,5 @@
 import PDFDocument from "pdfkit";
-import axios from "axios";
 import { IPaySlip } from "../../modules/payslip/payslip.interface";
-
-async function downloadImage(url: string): Promise<Buffer | null> {
-  try {
-    const response = await axios.get(url, { responseType: "arraybuffer" });
-    return Buffer.from(response.data);
-  } catch (error) {
-    console.error("Failed to download image:", error);
-    return null;
-  }
-}
 
 export async function generatePayslipPDFWithPDFKit(
   payslip: IPaySlip
@@ -23,18 +12,31 @@ export async function generatePayslipPDFWithPDFKit(
       doc.on("data", buffers.push.bind(buffers));
       doc.on("end", () => resolve(Buffer.concat(buffers)));
       doc.on("error", reject);
+      // Add header image (adjust path as needed)
 
-      // Company Header - Red Background with border
-      doc.rect(50, 50, 495, 40).fillAndStroke("#B71C1C", "#8B0000");
+      // Set image height and place it at the top
+      const imageHeight = 120; // change if your image needs more/less height
+      doc.image("./banner-woodrock.png", 50, 20, {
+        width: 495,
+        height: imageHeight,
+      });
+
+      // After the image, start body section
+      let currentY = 20 + imageHeight + 10; // image Y + image height + spacing
+
+      // Company Title Background
+      doc.rect(50, currentY, 495, 30).fillAndStroke("#B71C1C", "#8B0000");
 
       doc
         .fillColor("white")
-        .fontSize(18)
+        .fontSize(16)
         .font("Helvetica-Bold")
-        .text("WOODROCK SOFTONIC PVT LTD", 60, 62);
+        .text("WOODROCK SOFTONIC PVT LTD", 60, currentY + 8);
+
+      currentY += 30;
 
       // Company Address
-      doc.rect(50, 90, 495, 25).fillAndStroke("#F5F5F5", "#333333");
+      doc.rect(50, currentY, 495, 25).fillAndStroke("#F5F5F5", "#333333");
 
       doc
         .fillColor("black")
@@ -43,22 +45,25 @@ export async function generatePayslipPDFWithPDFKit(
         .text(
           "FITWAY ENCLAVE DN 12, STREET NO 18, SECTOR 5, KOLKATA - 700091",
           60,
-          100
+          currentY + 8
         );
 
+      currentY += 25;
+
       // Pay Slip Title
-      doc.rect(50, 115, 495, 25).fillAndStroke("#F5F5F5", "#333333");
+      doc.rect(50, currentY, 495, 25).fillAndStroke("#F5F5F5", "#333333");
 
       doc
         .fillColor("black")
         .fontSize(14)
         .font("Helvetica-Bold")
-        .text(`Pay Slip ${payslip.month} ${payslip.year}`, 280, 123);
+        .text(`Pay Slip ${payslip.month} ${payslip.year}`, 280, currentY + 8);
+
+      currentY += 25;
 
       // Employee Information Table
       const rowHeight = 28;
       const colWidth = 123.75;
-      let currentY = 150;
 
       const employeeData = [
         [
@@ -126,8 +131,6 @@ export async function generatePayslipPDFWithPDFKit(
         .font("Helvetica-Bold")
         .text("Calculated Salary", 55, currentY + 10)
         .text(`${payslip.calculatedSalary}`, 450, currentY + 10);
-
-      currentY += rowHeight + 20;
 
       // Earnings and Deductions Headers
       doc
