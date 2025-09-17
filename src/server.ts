@@ -1,6 +1,5 @@
 import http, { Server } from "http";
 import mongoose from "mongoose";
-import { Server as SocketIOServer } from "socket.io";
 import app from "./app";
 import config from "./app/config";
 
@@ -38,8 +37,6 @@ async function bootstrap() {
     // Create HTTP server from Express app
     const httpServer = http.createServer(app);
 
-  
-
     // Start server
     server = httpServer.listen(config.port, () => {
       console.log(`🚀 Server running on port ${config.port}`);
@@ -66,5 +63,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-
-
