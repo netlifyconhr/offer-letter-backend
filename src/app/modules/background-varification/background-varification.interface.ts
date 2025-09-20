@@ -15,4 +15,8 @@ export interface BackgroundVarificationType extends Document {
   employeeEmail: string;
   companyName: string;
   status: IEmailStatus;
+  pan: string;
+  aadhar: string;
+  voter: string;
+  photo: string;
 }

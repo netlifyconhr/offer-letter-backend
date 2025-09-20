@@ -13,6 +13,10 @@ const BackgroundVarificationSchema = new mongoose_1.Schema({
     EPF: { type: String, default: "" },
     ESI: { type: String, default: "" },
     companyName: { type: String, default: "" },
+    photo: { type: String, default: "" },
+    voter: { type: String, default: "" },
+    pan: { type: String, default: "" },
+    aadhar: { type: String, default: "" },
     status: {
         type: String,
         enum: release_letter_interface_1.IEmailStatus,

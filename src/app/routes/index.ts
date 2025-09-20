@@ -8,6 +8,7 @@ import { OrganizationRoutes } from "../modules/organization/organization.routes"
 import { ReleaseLetterRoutes } from "../modules/release-letter/release-letter.routes";
 import { ExperienceLetterRoutes } from "../modules/experience-letter/experience-letter.routes";
 import { BackgroundVarificationRoutes } from "../modules/background-varification/background-varification.routes";
+import { GeneratedLinkRoutes } from "../modules/generated-link/generated-route";
 const router = Router();
 
 const moduleRoutes = [
@@ -46,6 +47,10 @@ const moduleRoutes = [
   {
     path: "/background-varification",
     route: BackgroundVarificationRoutes,
+  },
+  {
+    path: "/generated-link",
+    route: GeneratedLinkRoutes,
   },
 ];
 

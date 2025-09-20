@@ -13,6 +13,10 @@ const BackgroundVarificationSchema = new Schema<BackgroundVarificationType>(
     EPF: { type: String, default: "" },
     ESI: { type: String, default: "" },
     companyName: { type: String, default: "" },
+    photo: { type: String, default: "" },
+    voter: { type: String, default: "" },
+    pan: { type: String, default: "" },
+    aadhar: { type: String, default: "" },
 
     status: {
       type: String,
