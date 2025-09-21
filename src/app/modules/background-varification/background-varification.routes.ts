@@ -23,8 +23,10 @@ router.post(
   "/upload-required-documents/:id",
   multerUploadGlobal.fields([
     { name: "pan", maxCount: 1 },
-    { name: "aadhar", maxCount: 1 },
-    { name: "voter", maxCount: 1 },
+    { name: "aadharFront", maxCount: 1 },
+    { name: "aadharBack", maxCount: 1 },
+    { name: "experience", maxCount: 1 },
+    { name: "education", maxCount: 1 },
     { name: "photo", maxCount: 1 },
   ]),
   async (req, res) => {
@@ -41,8 +43,10 @@ router.post(
     // Build payload directly matching schema fields
     const payload: Partial<BackgroundVarificationType> = {
       pan: getFileUrl("pan"),
-      aadhar: getFileUrl("aadhar"),
-      voter: getFileUrl("voter"),
+      aadharFront: getFileUrl("aadharFront"),
+      aadharBack: getFileUrl("aadharBack"),
+      education: getFileUrl("education"),
+      experience: getFileUrl("experience"),
       photo: getFileUrl("photo"),
     };
 

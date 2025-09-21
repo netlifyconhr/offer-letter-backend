@@ -14,10 +14,11 @@ const BackgroundVarificationSchema = new Schema<BackgroundVarificationType>(
     ESI: { type: String, default: "" },
     companyName: { type: String, default: "" },
     photo: { type: String, default: "" },
-    voter: { type: String, default: "" },
+    experience: { type: String, default: "" },
     pan: { type: String, default: "" },
-    aadhar: { type: String, default: "" },
-
+    aadharFront: { type: String, default: "" },
+    aadharBack: { type: String, default: "" },
+    education: { type: String, default: "" },
     status: {
       type: String,
 

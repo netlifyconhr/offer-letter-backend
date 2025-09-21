@@ -47,4 +47,33 @@ router.post(
   }
 );
 
+router.get(
+  "/verify-bg-url/:employeeId",
+  async (req: Request, res: Response) => {
+    try {
+      const { employeeId } = req.params;
+      const now = new Date();
+
+      // Check if there's already a valid (non-expired) link for this employee
+      let existingLink = await GeneratedLink.findOne({
+        employeeId,
+        expiresAt: { $gt: now }, // Not expired yet
+      });
+
+      if (!existingLink) {
+        // Return the existing valid link
+        return res.status(404).json({ message: "Please contact admin!" });
+      }
+
+      return res.json({
+        message: "Existing valid link found.",
+        expiresAt: existingLink.expiresAt,
+      });
+    } catch (error) {
+      console.error("Error generating background verification link:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+);
+
 export const GeneratedLinkRoutes = router;
