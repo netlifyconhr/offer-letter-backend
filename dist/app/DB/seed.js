@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_interface_1 = require("../modules/user/user.interface");
 const user_model_1 = __importDefault(require("../modules/user/user.model"));
 const adminUser = {
-    email: "anandagharami.am@gmail.com.com",
+    email: "anandagharami.am@gmail.com",
     password: "8420@nandA",
     name: "Admin",
     role: user_interface_1.UserRole.SUPERADMIN,

@@ -49,11 +49,14 @@ export const backgroundVarificationController = {
     const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
       defval: "",
       raw: false,
-    });
+    }) as BackgroundVarificationType[];
 
+    const filteredRows = rows.filter(
+      (it: BackgroundVarificationType) => it.employeeEmail
+    );
     const results =
       await backgroundVarificationService.createBulkBackgroundVarificationData(
-        rows as BackgroundVarificationType[]
+        filteredRows
       );
 
     sendResponse(res, {

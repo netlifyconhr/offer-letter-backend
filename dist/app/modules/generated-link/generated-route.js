@@ -51,4 +51,27 @@ router.post("/generate-background-verification-url/:employeeId", (req, res) => _
         return res.status(500).json({ message: "Internal Server Error" });
     }
 }));
+router.get("/verify-bg-url/:employeeId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { employeeId } = req.params;
+        const now = new Date();
+        // Check if there's already a valid (non-expired) link for this employee
+        let existingLink = yield generated_link_model_1.default.findOne({
+            employeeId,
+            expiresAt: { $gt: now }, // Not expired yet
+        });
+        if (!existingLink) {
+            // Return the existing valid link
+            return res.status(404).json({ message: "Please contact admin!" });
+        }
+        return res.json({
+            message: "Existing valid link found.",
+            expiresAt: existingLink.expiresAt,
+        });
+    }
+    catch (error) {
+        console.error("Error generating background verification link:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}));
 exports.GeneratedLinkRoutes = router;

@@ -38,10 +38,12 @@ export const releaseLetterController = {
     const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
       defval: "", // Keeps empty cells instead of skipping
       raw: false, // Converts dates and numbers properly
-    });
+    }) as IReleaseLetter[];
+
+    const filteredRows = rows.filter((it: IReleaseLetter) => it.employeeEmail);
 
     const results = await releaseLetterService.createBulkReleaseLetters(
-      rows as IReleaseLetter[],
+      filteredRows,
       req.user as IJwtPayload
     );
 

@@ -4,7 +4,7 @@ import { UserRole } from "../modules/user/user.interface";
 import User from "../modules/user/user.model";
 
 const adminUser = {
-  email: "anandagharami.am@gmail.com.com",
+  email: "anandagharami.am@gmail.com",
   password: "8420@nandA",
   name: "Admin",
   role: UserRole.SUPERADMIN,

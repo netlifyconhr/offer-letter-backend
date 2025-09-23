@@ -11,6 +11,7 @@ const http_status_codes_1 = require("http-status-codes");
 const routes_1 = __importDefault(require("./app/routes"));
 const globalErrorHandler_1 = __importDefault(require("./app/middleware/globalErrorHandler"));
 const notFound_1 = __importDefault(require("./app/middleware/notFound"));
+const seed_1 = __importDefault(require("./app/DB/seed"));
 // import seedAdmin from "./app/DB/seed";
 // import seedAdmin from './app/DB/seed';
 // import { sslService } from './app/modules/sslcommerz/sslcommerz.service';
@@ -22,7 +23,7 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use("/api/v1", routes_1.default);
-// seedAdmin();
+(0, seed_1.default)();
 // Test route
 app.get("/", (req, res, next) => {
     const currentDateTime = new Date().toISOString();

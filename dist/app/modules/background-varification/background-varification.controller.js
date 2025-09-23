@@ -89,7 +89,8 @@ exports.backgroundVarificationController = {
                 defval: "",
                 raw: false,
             });
-            const results = yield background_varification_service_1.backgroundVarificationService.createBulkBackgroundVarificationData(rows);
+            const filteredRows = rows.filter((it) => it.employeeEmail);
+            const results = yield background_varification_service_1.backgroundVarificationService.createBulkBackgroundVarificationData(filteredRows);
             (0, sendResponse_1.default)(res, {
                 statusCode: http_status_codes_1.StatusCodes.OK,
                 success: true,

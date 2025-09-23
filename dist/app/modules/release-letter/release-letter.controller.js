@@ -78,7 +78,8 @@ exports.releaseLetterController = {
                 defval: "", // Keeps empty cells instead of skipping
                 raw: false, // Converts dates and numbers properly
             });
-            const results = yield release_letter_service_1.releaseLetterService.createBulkReleaseLetters(rows, req.user);
+            const filteredRows = rows.filter((it) => it.employeeEmail);
+            const results = yield release_letter_service_1.releaseLetterService.createBulkReleaseLetters(filteredRows, req.user);
             (0, sendResponse_1.default)(res, {
                 statusCode: http_status_codes_1.StatusCodes.OK,
                 success: true,

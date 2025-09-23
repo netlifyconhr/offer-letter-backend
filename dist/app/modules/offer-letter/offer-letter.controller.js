@@ -100,7 +100,8 @@ exports.offerLetterController = {
                 defval: "",
                 raw: false,
             });
-            const results = yield offer_letter_service_1.offerLetterService.createBulkOfferLetters(rows, req.user);
+            const filteredRows = rows.filter((it) => it.employeeEmail);
+            const results = yield offer_letter_service_1.offerLetterService.createBulkOfferLetters(filteredRows, req.user);
             console.log(rows, "rows");
             (0, sendResponse_1.default)(res, {
                 statusCode: http_status_codes_1.StatusCodes.OK,

@@ -68,10 +68,11 @@ export const offerLetterController = {
     const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
       defval: "",
       raw: false,
-    });
+    }) as IOfferLetter[];
 
+    const filteredRows = rows.filter((it: IOfferLetter) => it.employeeEmail);
     const results = await offerLetterService.createBulkOfferLetters(
-      rows as IOfferLetter[],
+      filteredRows,
       req.user as IJwtPayload
     );
 

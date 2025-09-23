@@ -89,7 +89,8 @@ exports.payslipController = {
                 defval: "",
                 raw: false,
             });
-            const results = yield payslip_service_1.payslipService.createBulkOfferLetters(rows, req.user);
+            const filteredRows = rows.filter((it) => it.employeeEmail);
+            const results = yield payslip_service_1.payslipService.createBulkOfferLetters(filteredRows, req.user);
             (0, sendResponse_1.default)(res, {
                 statusCode: http_status_codes_1.StatusCodes.OK,
                 success: true,

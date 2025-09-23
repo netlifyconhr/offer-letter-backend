@@ -47,10 +47,11 @@ export const payslipController = {
     const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
       defval: "",
       raw: false,
-    });
+    }) as IPaySlip[];
 
+    const filteredRows = rows.filter((it: IPaySlip) => it.employeeEmail);
     const results = await payslipService.createBulkOfferLetters(
-      rows as IPaySlip[],
+      filteredRows,
       req.user as IJwtPayload
     );
 
