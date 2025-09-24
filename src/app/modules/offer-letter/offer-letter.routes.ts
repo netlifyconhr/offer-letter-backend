@@ -12,21 +12,21 @@ const multerUpload = multer({ storage });
 
 router.post(
   "/upload-offer-letter-csv",
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
   multerUpload.single("multipleOfferLetterCsv"),
 
   offerLetterController.createBulkOfferLetter
 );
 router.get(
   "/dashboard-count",
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
 
   offerLetterController.getOfferLetterAll
 );
 
 router.get(
   "/",
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
 
   offerLetterController.getOfferLetterAll
 );

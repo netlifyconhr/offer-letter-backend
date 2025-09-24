@@ -17,7 +17,7 @@ router.post(
 );
 router.get(
   "/",
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
   releaseLetterController.getOfferLetterAll
 );
 

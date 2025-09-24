@@ -10,7 +10,7 @@ const router = Router();
 router.get("/", candidateExamController.getcandidateExamAll);
 router.get(
   "/:id",
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
   candidateExamController.getcandidateExamById
 );
 

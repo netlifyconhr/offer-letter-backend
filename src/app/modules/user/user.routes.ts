@@ -8,11 +8,15 @@ import { UserValidation } from "./user.validation";
 
 const router = Router();
 
-router.get("/", auth(UserRole.ADMIN), UserController.getAllUser);
+router.get(
+  "/",
+  auth(UserRole.ADMIN, UserRole.SUPERADMIN),
+  UserController.getAllUser
+);
 
 router.get(
   "/me",
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
   UserController.myProfile
 );
 
@@ -25,7 +29,7 @@ router.post(
 
 router.patch(
   "/:id/status",
-  auth(UserRole.ADMIN),
+  auth(UserRole.ADMIN, UserRole.SUPERADMIN),
   UserController.updateUserStatus
 );
 

@@ -11,7 +11,7 @@ const router = Router();
 
 router.get(
   "/my-organization",
-  auth(UserRole.USER),
+  auth(UserRole.USER, UserRole.SUPERADMIN),
   OrganizationController.getMyOrganization
 );
 

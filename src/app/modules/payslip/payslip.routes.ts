@@ -12,20 +12,20 @@ const multerUpload = multer({ storage });
 
 router.post(
   "/upload-payslip-csv",
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
   multerUpload.single("multiplePayslipCsv"),
   payslipController.createBulkOfferLetter
 );
 router.get(
   "/",
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
 
   payslipController.getOfferLetterAll
 );
 
 router.get(
   "/dashboard-payslip",
-  auth(UserRole.ADMIN, UserRole.USER),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
   payslipController.getThisMonthPayslipCount
 );
 
