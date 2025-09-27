@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateOfferLetterPDFByPdfKIt = generateOfferLetterPDFByPdfKIt;
 const axios_1 = __importDefault(require("axios"));
 const pdfkit_1 = __importDefault(require("pdfkit"));
+const global_1 = require("../woodrock/global");
 // Download image from URL and convert to buffer
 function downloadImage(url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -58,41 +59,24 @@ function createTable(doc, x, y, data) {
 function createPage1(doc, offerLetter, signatureBuffer) {
     return __awaiter(this, void 0, void 0, function* () {
         const pageWidth = 595.28; // A4 width in points
-        const pageHeight = 841.89; // A4 height in points
-        // Top dark bar
-        doc.rect(0, 0, pageWidth, 25).fill("#3b3b3b");
-        // Company name header
+        let yPosition = 110; // Start yPosition at 100 to allow space for new item
         doc
-            .fillColor("#000000")
-            .fontSize(24)
-            .font("Helvetica-Bold")
-            .text("WOODROCK SOFTONIC PVT LTD", 20, 45);
-        // drawParallelogram(doc, pageWidth - 200, 35, 200, 30, 40, "#000000");
-        const x = pageWidth - 200;
-        const y = 35;
-        const width = 200;
-        const height = 30;
-        const skew = 40;
-        doc
-            .moveTo(x + skew, y) // Top-left (skewed)
-            .lineTo(x + width, y) // Top-right
-            .lineTo(x + width, y + height) // Bottom-right (skewed)
-            .lineTo(x, y + height) // Bottom-left
-            .closePath() // Close the shape
-            .fill("#000000"); // Fill with specified color
-        // Maroon strip with employee name
-        doc.rect(0, 100, 320, 50).fill("#660505");
+            .moveTo(0, 100) // Starting point: bottom-left of the shape
+            .lineTo(250, 100) // First skewed point towards the right at y = 100
+            .lineTo(320, 140) // Bottom-right skewed point at x = 320, y = 140 (height 40)
+            .lineTo(0, 140)
+            .fill("#660505");
         doc
             .fillColor("#ffffff")
             .fontSize(18)
             .font("Helvetica-Bold")
-            .text(`Dear ${offerLetter.employeeName}`, 30, 118);
+            .text(`Dear ${offerLetter.employeeName}`, 30, yPosition + 2);
         // Date section
         doc
             .fillColor("#ff0000")
             .fontSize(16)
             .font("Helvetica-Bold")
-            .text(`Date: ${offerLetter.offerLetterDate}`, pageWidth - 200, 170, {
+            .text(`Date: ${offerLetter.offerLetterDate}`, pageWidth - 200, yPosition + 70, {
             align: "right",
         });
         // Main content
@@ -102,9 +86,9 @@ function createPage1(doc, offerLetter, signatureBuffer) {
             .font("Helvetica")
             .text("Congratulations! With reference to your application and subsequent interview with us we are pleased to offer you the position of Customer Care Executive with Woodrock Softonic Private Limited. Your beginning monthly remuneration will be INR " +
             offerLetter.employeeCtc +
-            "/-", 30, 210, { width: 535, lineGap: 3 });
+            "/-", 30, yPosition + 120, { width: 535, lineGap: 3 });
         // Job details section
-        let yPosition = 270;
+        let jobDetailsYPosition = yPosition + 180;
         const jobDetails = [
             "Shift Allocated: Full Time",
             "Shift Timing Allocated: Flexible Timing",
@@ -117,52 +101,54 @@ function createPage1(doc, offerLetter, signatureBuffer) {
             const [label, value] = detail.split(": ");
             doc
                 .font("Helvetica-Bold")
-                .text(label + ":", 30, yPosition, { continued: true })
+                .text(label + ":", 30, jobDetailsYPosition, { continued: true })
                 .font("Helvetica")
                 .text(" " + value);
-            yPosition += 20;
+            jobDetailsYPosition += 20;
         });
         // Additional terms
-        yPosition += 10;
+        jobDetailsYPosition += 10;
         doc
             .font("Helvetica")
-            .text("The offer has been made based on information furnished by you. However, if there is a discrepancy in the copies of any document or certificate given by you as proof, we hold the rights to review the offer of employment.", 30, yPosition, { width: 535, lineGap: 3 });
-        yPosition += 40;
-        doc.text("Employment as per this offer is subject to your being medically fit.", 30, (yPosition += 20), { width: 535 });
-        yPosition += 30;
-        doc.text("Please sign and return duplicate copy of this letter in token of your acceptance.", 30, yPosition, { width: 535 });
-        yPosition += 30;
-        doc.text("We congratulate you on your appointment and wish you a long and successful career with us. We are confident that your contribution will take us further in our journey towards becoming world leaders. We assure you of our support for your professional development and growth.", 30, yPosition, { width: 535, lineGap: 3 });
-        yPosition += 60;
-        doc.text("We look forward to mutually rewarding term with us.", 30, yPosition, { width: 535 });
+            .text("The offer has been made based on information furnished by you. However, if there is a discrepancy in the copies of any document or certificate given by you as proof, we hold the rights to review the offer of employment.", 30, jobDetailsYPosition, { width: 535, lineGap: 3 });
+        jobDetailsYPosition += 40;
+        doc.text("Employment as per this offer is subject to your being medically fit.", 30, (jobDetailsYPosition += 20), { width: 535 });
+        jobDetailsYPosition += 30;
+        doc.text("Please sign and return duplicate copy of this letter in token of your acceptance.", 30, jobDetailsYPosition, { width: 535 });
+        jobDetailsYPosition += 30;
+        doc.text("We congratulate you on your appointment and wish you a long and successful career with us. We are confident that your contribution will take us further in our journey towards becoming world leaders. We assure you of our support for your professional development and growth.", 30, jobDetailsYPosition, { width: 535, lineGap: 3 });
+        jobDetailsYPosition += 60;
+        doc.text("We look forward to mutually rewarding term with us.", 30, jobDetailsYPosition, { width: 535 });
         // Signature section
-        yPosition += 60;
-        doc.text("Sincerely,", 30, yPosition);
+        jobDetailsYPosition += 60;
+        doc.text("Sincerely,", 30, jobDetailsYPosition);
         // Add signature image if available
         if (signatureBuffer) {
             try {
-                doc.image(signatureBuffer, 30, yPosition + 20, {
+                doc.image(signatureBuffer, 30, jobDetailsYPosition + 20, {
                     width: 120,
                     height: 60,
                 });
-                yPosition += 90;
+                jobDetailsYPosition += 90;
             }
             catch (error) {
                 console.error("Failed to add signature image:", error);
-                yPosition += 30;
+                jobDetailsYPosition += 30;
             }
         }
         else {
-            yPosition += 30;
+            jobDetailsYPosition += 30;
         }
-        doc.font("Helvetica-Bold").text("Simran Jha || HR Department", 30, yPosition);
-        yPosition += 18;
-        doc.text("Woodrock Softonic Pvt Ltd", 30, yPosition);
-        yPosition += 18;
+        doc
+            .font("Helvetica-Bold")
+            .text("Simran Jha || HR Department", 30, jobDetailsYPosition);
+        jobDetailsYPosition += 18;
+        doc.text("Woodrock Softonic Pvt Ltd", 30, jobDetailsYPosition);
+        jobDetailsYPosition += 18;
         doc
             .font("Helvetica")
             .fillColor("#0000ff")
-            .text("Email: Simran.jha@woodrockgroup.in", 30, yPosition);
+            .text("Email: Simran.jha@woodrockgroup.in", 30, jobDetailsYPosition);
     });
 }
 // Create Page 2 - Terms & Conditions
@@ -281,6 +267,7 @@ function generateOfferLetterPDFByPdfKIt(offerLetter) {
                 doc.on("error", (err) => reject(err));
                 // Download signature image
                 const signatureBuffer = yield downloadImage("https://res.cloudinary.com/dri1mh3xh/image/upload/v1750698006/mhyrewrvtfgpqz21lfo7.jpg");
+                yield (0, global_1.generateWoodrockHeader)(doc);
                 // PAGE 1 - Main Offer Letter
                 yield createPage1(doc, offerLetter, signatureBuffer);
                 // PAGE 2 - Terms & Conditions

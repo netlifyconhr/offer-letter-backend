@@ -12,7 +12,7 @@ const user_interface_1 = require("../user/user.interface");
 const bodyParser_1 = require("../../middleware/bodyParser");
 const router = (0, express_1.Router)();
 router.get("/", candidate_exam_controller_1.candidateExamController.getcandidateExamAll);
-router.get("/:id", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER), candidate_exam_controller_1.candidateExamController.getcandidateExamById);
+router.get("/:id", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN), candidate_exam_controller_1.candidateExamController.getcandidateExamById);
 router.post("/", multer_config_1.multerUpload.single("cv"), bodyParser_1.parseBody, candidate_exam_controller_1.candidateExamController.createcandidateExam);
 router.patch("/:candidateId", candidate_exam_controller_1.candidateExamController.updateCandidateExamById);
 exports.CandidateExamRoutes = router;

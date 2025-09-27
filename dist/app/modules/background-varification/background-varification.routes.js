@@ -23,7 +23,7 @@ const background_varification_model_1 = __importDefault(require("./background-va
 const router = (0, express_1.Router)();
 const storage = multer_1.default.memoryStorage();
 const multerUpload = (0, multer_1.default)({ storage });
-router.post("/upload-bulk-background-varificaton-csv", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER), multerUpload.single("backgroundVarificationCsv"), background_varification_controller_1.backgroundVarificationController.createBulkBackgroundVarification);
+router.post("/upload-bulk-background-varificaton-csv", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN), multerUpload.single("backgroundVarificationCsv"), background_varification_controller_1.backgroundVarificationController.createBulkBackgroundVarification);
 router.post("/upload-required-documents/:id", multer_config_1.default.fields([
     { name: "pan", maxCount: 1 },
     { name: "aadharFront", maxCount: 1 },
@@ -71,6 +71,6 @@ router.post("/upload-required-documents/:id", multer_config_1.default.fields([
         });
     }
 }));
-router.get("/", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER), background_varification_controller_1.backgroundVarificationController.getBackgroundVarificationAll);
-router.get("/dashboard-payslip", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER), background_varification_controller_1.backgroundVarificationController.getThisMonthPayslipCount);
+router.get("/", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN), background_varification_controller_1.backgroundVarificationController.getBackgroundVarificationAll);
+router.get("/dashboard-payslip", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN), background_varification_controller_1.backgroundVarificationController.getThisMonthPayslipCount);
 exports.BackgroundVarificationRoutes = router;

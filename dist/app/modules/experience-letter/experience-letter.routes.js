@@ -13,5 +13,5 @@ const router = (0, express_1.Router)();
 const storage = multer_1.default.memoryStorage();
 const multerUpload = (0, multer_1.default)({ storage });
 router.post("/upload-experience-letter-csv", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.SUPERADMIN, user_interface_1.UserRole.USER), multerUpload.single("multipleExperienceLetterCsv"), experience_letter_controller_1.releaseLetterController.createBulkOfferLetter);
-router.get("/", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER), experience_letter_controller_1.releaseLetterController.getOfferLetterAll);
+router.get("/", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN), experience_letter_controller_1.releaseLetterController.getOfferLetterAll);
 exports.ExperienceLetterRoutes = router;

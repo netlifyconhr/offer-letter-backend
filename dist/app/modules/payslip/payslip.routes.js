@@ -13,9 +13,9 @@ const multer_1 = __importDefault(require("multer"));
 const router = (0, express_1.Router)();
 const storage = multer_1.default.memoryStorage();
 const multerUpload = (0, multer_1.default)({ storage });
-router.post("/upload-payslip-csv", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER), multerUpload.single("multiplePayslipCsv"), payslip_controller_1.payslipController.createBulkOfferLetter);
-router.get("/", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER), payslip_controller_1.payslipController.getOfferLetterAll);
-router.get("/dashboard-payslip", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER), payslip_controller_1.payslipController.getThisMonthPayslipCount);
+router.post("/upload-payslip-csv", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN), multerUpload.single("multiplePayslipCsv"), payslip_controller_1.payslipController.createBulkOfferLetter);
+router.get("/", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN), payslip_controller_1.payslipController.getOfferLetterAll);
+router.get("/dashboard-payslip", (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN), payslip_controller_1.payslipController.getThisMonthPayslipCount);
 // router.get("/delete-payslip-letters/:email", async (req, res, next) => {
 //   try {
 //     const employeeEmail = req.params.email;
