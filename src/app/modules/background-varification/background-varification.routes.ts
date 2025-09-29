@@ -19,6 +19,12 @@ router.post(
   backgroundVarificationController.createBulkBackgroundVarification
 );
 
+router.patch(
+  "/update-details/:employeeId",
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
+  backgroundVarificationController.updateBackgroundVarification
+);
+
 router.post(
   "/upload-required-documents/:id",
   multerUploadGlobal.fields([
@@ -82,7 +88,7 @@ router.post(
 
 router.get(
   "/",
-  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
+  // auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN, UserRole.VERIFIER),
 
   backgroundVarificationController.getBackgroundVarificationAll
 );

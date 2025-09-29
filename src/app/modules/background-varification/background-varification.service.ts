@@ -47,6 +47,16 @@ export const backgroundVarificationService = {
     };
   },
 
+  async getAndUpdateEmployeeById(
+    employeeId: string,
+    payload: Partial<BackgroundVarificationType>
+  ) {
+    console.log(payload, employeeId);
+    return await BackgroundVarification.findByIdAndUpdate(employeeId, payload, {
+      upsert: true,
+    });
+  },
+
   async createBulkBackgroundVarificationData(
     payload: BackgroundVarificationType[]
   ) {

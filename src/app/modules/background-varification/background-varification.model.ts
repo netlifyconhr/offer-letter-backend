@@ -18,7 +18,10 @@ const BackgroundVarificationSchema = new Schema<BackgroundVarificationType>(
     pan: { type: String, default: "" },
     aadharFront: { type: String, default: "" },
     aadharBack: { type: String, default: "" },
-    education: { type: String, default: "" },
+    adharStatus: { type: String, default: "" },
+    educationStatus: { type: String, default: "" },
+    panStatus: { type: String, default: "" },
+    remarks: { type: String, default: "" },
     status: {
       type: String,
 

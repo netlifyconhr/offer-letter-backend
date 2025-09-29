@@ -20,6 +20,18 @@ export const backgroundVarificationController = {
       data: result.result,
     });
   }),
+  updateBackgroundVarification: catchAsync(async (req, res) => {
+    const result = await backgroundVarificationService.getAndUpdateEmployeeById(
+      req.params.employeeId as string,
+      req.body
+    );
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Background varification are updated successfully",
+      data: result,
+    });
+  }),
   async getThisMonthPayslipCount(req: Request, res: Response) {
     const result =
       await backgroundVarificationService.getThisMonthPayslipCount();
