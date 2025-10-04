@@ -1,20 +1,16 @@
-import { IEmailStatus } from "../release-letter/release-letter.interface";
+
 
 export interface BackgroundVarificationType extends Document {
   employeeName: string;
   employeeId: string;
   employeeDesignation: string;
   employeeDepartment: string;
-  employeeUAN: string;
-  employeeESINO: string;
-  uninformedLeaves: string;
-  halfDay: string;
-  calculatedSalary: string;
-  EPF: string;
-  ESI: string;
   employeeEmail: string;
   companyName: string;
-  status: IEmailStatus;
+  companyBranch: string;
+   companyRegion: string;
+   employeeGender:string;
+
   pan: string;
   aadharFront: string;
   aadharBack: string;
@@ -22,7 +18,12 @@ export interface BackgroundVarificationType extends Document {
   education: string;
   photo: string;
   educationStatus: string;
+  experienceStatus:string;
   panStatus: string;
   adharStatus: string;
   remarks: string;
+  employeePhone: string;
+  
+  employeeDateOfJoin: string;
+
 }

@@ -74,7 +74,7 @@ export const backgroundVarificationController = {
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
-      message: "Bulk offer letters processed",
+      message: "Bulk employee data  processed for background varification!",
       data: results,
     });
   },
