@@ -45,12 +45,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importStar(require("mongoose"));
-const user_interface_1 = require("./user.interface");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const http_status_codes_1 = require("http-status-codes");
+const mongoose_1 = __importStar(require("mongoose"));
 const config_1 = __importDefault(require("../../config"));
 const appError_1 = __importDefault(require("../../errors/appError"));
-const http_status_codes_1 = require("http-status-codes");
+const user_interface_1 = require("./user.interface");
 // Create the User schema based on the interface
 const userSchema = new mongoose_1.Schema({
     name: {
@@ -69,7 +69,7 @@ const userSchema = new mongoose_1.Schema({
     },
     role: {
         type: String,
-        enum: [user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN],
+        enum: [user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.USER, user_interface_1.UserRole.SUPERADMIN, user_interface_1.UserRole.VERIFIER],
         default: user_interface_1.UserRole.USER,
     },
     hasOrganization: {

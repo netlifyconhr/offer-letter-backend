@@ -44,6 +44,14 @@ exports.backgroundVarificationService = {
             };
         });
     },
+    getAndUpdateEmployeeById(employeeId, payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log(payload, employeeId);
+            return yield background_varification_model_1.default.findByIdAndUpdate(employeeId, payload, {
+                upsert: true,
+            });
+        });
+    },
     createBulkBackgroundVarificationData(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             const results = yield background_varification_model_1.default.insertMany(payload);

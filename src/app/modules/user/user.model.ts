@@ -1,9 +1,9 @@
-import mongoose, { Schema } from "mongoose";
-import { IUser, UserModel, UserRole } from "./user.interface";
 import bcrypt from "bcrypt";
+import { StatusCodes } from "http-status-codes";
+import mongoose, { Schema } from "mongoose";
 import config from "../../config";
 import AppError from "../../errors/appError";
-import { StatusCodes } from "http-status-codes";
+import { IUser, UserModel, UserRole } from "./user.interface";
 
 // Create the User schema based on the interface
 const userSchema = new Schema<IUser, UserModel>(
@@ -24,7 +24,7 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     role: {
       type: String,
-      enum: [UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN],
+      enum: [UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN,UserRole.VERIFIER],
       default: UserRole.USER,
     },
     hasOrganization: {

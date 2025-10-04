@@ -16,7 +16,7 @@ const userValidationSchema = zod_1.z.object({
         email: zod_1.z.string().email('Invalid email address'),
         password: zod_1.z.string().min(6, 'Password must be at least 6 characters long'),
         name: zod_1.z.string().min(1, 'Name is required'),
-        role: zod_1.z.enum([user_interface_1.UserRole.USER, user_interface_1.UserRole.ADMIN]).default(user_interface_1.UserRole.USER), // Match enum values in your code
+        role: zod_1.z.enum([user_interface_1.UserRole.USER, user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.VERIFIER]).default(user_interface_1.UserRole.USER), // Match enum values in your code
         clientInfo: clientInfoSchema // Nested schema for client info
     })
 });

@@ -7,4 +7,5 @@ var UserRole;
     UserRole["ADMIN"] = "admin";
     UserRole["SUPERADMIN"] = "superadmin";
     UserRole["USER"] = "user";
+    UserRole["VERIFIER"] = "verifier";
 })(UserRole || (exports.UserRole = UserRole = {}));

@@ -1,9 +1,9 @@
 import { Router } from "express";
-import auth from "../../middleware/auth";
-import { UserRole } from "../user/user.interface";
-import { parseBody } from "../../middleware/bodyParser";
 import { multerUpload } from "../../config/multer.config";
+import auth from "../../middleware/auth";
+import { parseBody } from "../../middleware/bodyParser";
 import validateRequest from "../../middleware/validateRequest";
+import { UserRole } from "../user/user.interface";
 import { OrganizationController } from "./organization.controller";
 import { OrganizationValidation } from "./organization.validation";
 
@@ -11,7 +11,7 @@ const router = Router();
 
 router.get(
   "/my-organization",
-  auth(UserRole.USER, UserRole.SUPERADMIN),
+  auth(UserRole.USER, UserRole.SUPERADMIN,UserRole.VERIFIER),
   OrganizationController.getMyOrganization
 );
 

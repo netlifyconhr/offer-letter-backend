@@ -16,7 +16,7 @@ router.get(
 
 router.get(
   "/me",
-  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN,UserRole.VERIFIER),
   UserController.myProfile
 );
 

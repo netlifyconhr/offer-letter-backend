@@ -1,8 +1,8 @@
 import { Router } from "express";
+import multer from "multer";
 import auth from "../../middleware/auth";
 import { UserRole } from "../user/user.interface";
 import { payslipController } from "./payslip.controller";
-import multer from "multer";
 // import PaySlip from "./payslip.model";
 
 const router = Router();
@@ -18,14 +18,14 @@ router.post(
 );
 router.get(
   "/",
-  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN,UserRole.VERIFIER),
 
   payslipController.getOfferLetterAll
 );
 
 router.get(
   "/dashboard-payslip",
-  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN,UserRole.VERIFIER),
   payslipController.getThisMonthPayslipCount
 );
 

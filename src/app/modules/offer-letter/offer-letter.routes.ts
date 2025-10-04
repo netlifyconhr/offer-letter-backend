@@ -1,8 +1,8 @@
 import { Router } from "express";
+import multer from "multer";
 import auth from "../../middleware/auth";
 import { UserRole } from "../user/user.interface";
 import { offerLetterController } from "./offer-letter.controller";
-import multer from "multer";
 // import OfferLetter from "./offer-letter.model";
 
 const router = Router();
@@ -19,14 +19,14 @@ router.post(
 );
 router.get(
   "/dashboard-count",
-  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN,UserRole.VERIFIER),
 
   offerLetterController.getOfferLetterAll
 );
 
 router.get(
   "/",
-  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN),
+  auth(UserRole.ADMIN, UserRole.USER, UserRole.SUPERADMIN,UserRole.VERIFIER),
 
   offerLetterController.getOfferLetterAll
 );

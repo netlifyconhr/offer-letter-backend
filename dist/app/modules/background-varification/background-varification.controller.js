@@ -63,6 +63,15 @@ exports.backgroundVarificationController = {
             data: result.result,
         });
     })),
+    updateBackgroundVarification: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield background_varification_service_1.backgroundVarificationService.getAndUpdateEmployeeById(req.params.employeeId, req.body);
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Background varification are updated successfully",
+            data: result,
+        });
+    })),
     getThisMonthPayslipCount(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield background_varification_service_1.backgroundVarificationService.getThisMonthPayslipCount();
@@ -94,7 +103,7 @@ exports.backgroundVarificationController = {
             (0, sendResponse_1.default)(res, {
                 statusCode: http_status_codes_1.StatusCodes.OK,
                 success: true,
-                message: "Bulk offer letters processed",
+                message: "Bulk employee data  processed for background varification!",
                 data: results,
             });
         });
