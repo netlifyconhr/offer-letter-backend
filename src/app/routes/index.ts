@@ -1,14 +1,15 @@
 import { Router } from "express";
-import { UserRoutes } from "../modules/user/user.routes";
 import { AuthRoutes } from "../modules/auth/auth.routes";
-import { OfferLetterRoutes } from "../modules/offer-letter/offer-letter.routes";
-import { PayslipLetterRoutes } from "../modules/payslip/payslip.routes";
-import { CandidateExamRoutes } from "../modules/candidate-exam/candidate-exam.routes";
-import { OrganizationRoutes } from "../modules/organization/organization.routes";
-import { ReleaseLetterRoutes } from "../modules/release-letter/release-letter.routes";
-import { ExperienceLetterRoutes } from "../modules/experience-letter/experience-letter.routes";
 import { BackgroundVarificationRoutes } from "../modules/background-varification/background-varification.routes";
+import { CandidateExamRoutes } from "../modules/candidate-exam/candidate-exam.routes";
+import { ExperienceLetterRoutes } from "../modules/experience-letter/experience-letter.routes";
 import { GeneratedLinkRoutes } from "../modules/generated-link/generated-route";
+import { GuestMessageRoutes } from "../modules/guest-message/guest-message.routes";
+import { OfferLetterRoutes } from "../modules/offer-letter/offer-letter.routes";
+import { OrganizationRoutes } from "../modules/organization/organization.routes";
+import { PayslipLetterRoutes } from "../modules/payslip/payslip.routes";
+import { ReleaseLetterRoutes } from "../modules/release-letter/release-letter.routes";
+import { UserRoutes } from "../modules/user/user.routes";
 const router = Router();
 
 const moduleRoutes = [
@@ -43,6 +44,10 @@ const moduleRoutes = [
   {
     path: "/experience-letter",
     route: ExperienceLetterRoutes,
+  },
+   {
+    path: "/guest-message",
+    route: GuestMessageRoutes,
   },
   {
     path: "/background-varification",

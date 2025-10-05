@@ -108,8 +108,8 @@ const sendEmailFromAdmin = async (
       port: 587,
       secure: false,
       auth: {
-        user: "anandagharami.am@gmail.com",
-        pass: "gcjm dbqa idpd jcfh",
+        user: "netlifyconhr@gmail.com",
+        pass: "gmkb xaxw wrpa tlsk",
       },
       tls: {
         rejectUnauthorized: false,
@@ -117,7 +117,7 @@ const sendEmailFromAdmin = async (
     });
 
     const mailOptions: any = {
-      from: `Woodrock <${"anandagharami.am@gmail.com"}>`, // corrected formatting
+      from: `<${"netlifyconhr@gmail.com"}>`, // corrected formatting
       to: email,
       subject,
       html,
