@@ -19,6 +19,9 @@ export interface BackgroundVarificationType extends Document {
   photo: string;
   educationStatus: string;
   experienceStatus:string;
+  
+  addressStatus: string;
+  criminalStatus:string;
   panStatus: string;
   adharStatus: string;
   remarks: string;

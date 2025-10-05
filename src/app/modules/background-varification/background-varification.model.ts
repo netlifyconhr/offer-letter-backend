@@ -8,6 +8,11 @@ const BackgroundVarificationSchema = new Schema<BackgroundVarificationType>(
     employeeDesignation: { type: String, default: "" },
     employeeDepartment: { type: String, default: "" },
     experienceStatus: { type: String, default: "" },
+
+    addressStatus: { type: String, default: "" },
+
+    criminalStatus: { type: String, default: "" },
+
     employeePhone: { type: String, default: "" },
     employeeDateOfJoin: { type: String, default: "" },
     employeeGender: { type: String, default: "" },

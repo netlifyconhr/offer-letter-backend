@@ -1,16 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const user_routes_1 = require("../modules/user/user.routes");
 const auth_routes_1 = require("../modules/auth/auth.routes");
-const offer_letter_routes_1 = require("../modules/offer-letter/offer-letter.routes");
-const payslip_routes_1 = require("../modules/payslip/payslip.routes");
-const candidate_exam_routes_1 = require("../modules/candidate-exam/candidate-exam.routes");
-const organization_routes_1 = require("../modules/organization/organization.routes");
-const release_letter_routes_1 = require("../modules/release-letter/release-letter.routes");
-const experience_letter_routes_1 = require("../modules/experience-letter/experience-letter.routes");
 const background_varification_routes_1 = require("../modules/background-varification/background-varification.routes");
+const candidate_exam_routes_1 = require("../modules/candidate-exam/candidate-exam.routes");
+const experience_letter_routes_1 = require("../modules/experience-letter/experience-letter.routes");
 const generated_route_1 = require("../modules/generated-link/generated-route");
+const guest_message_routes_1 = require("../modules/guest-message/guest-message.routes");
+const offer_letter_routes_1 = require("../modules/offer-letter/offer-letter.routes");
+const organization_routes_1 = require("../modules/organization/organization.routes");
+const payslip_routes_1 = require("../modules/payslip/payslip.routes");
+const release_letter_routes_1 = require("../modules/release-letter/release-letter.routes");
+const user_routes_1 = require("../modules/user/user.routes");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -44,6 +45,10 @@ const moduleRoutes = [
     {
         path: "/experience-letter",
         route: experience_letter_routes_1.ExperienceLetterRoutes,
+    },
+    {
+        path: "/guest-message",
+        route: guest_message_routes_1.GuestMessageRoutes,
     },
     {
         path: "/background-varification",

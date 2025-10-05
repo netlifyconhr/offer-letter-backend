@@ -1,11 +1,11 @@
 import { Router } from "express";
 import multer from "multer";
+import multerUploadGlobal from "../../config/multer.config";
 import auth from "../../middleware/auth";
 import { UserRole } from "../user/user.interface";
 import { backgroundVarificationController } from "./background-varification.controller";
-import multerUploadGlobal from "../../config/multer.config";
-import BackgroundVarification from "./background-varification.model";
 import { BackgroundVarificationType } from "./background-varification.interface";
+import BackgroundVarification from "./background-varification.model";
 
 const router = Router();
 
@@ -81,6 +81,41 @@ router.post(
         success: false,
         message: "Failed to upload documents.",
         error: "error?.message",
+      });
+    }
+  }
+);
+
+router.delete(
+  "/upload-required-documents/:id",
+  async (req, res) => {
+    const payload = req.body
+
+    try {
+      const updated = await BackgroundVarification.findByIdAndUpdate(
+        req.params.id,
+        payload,
+        { new: true }
+      );
+
+      if (!updated) {
+        return res.status(404).json({
+          success: false,
+          message: "Background verification record not found.",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Message updated successfully.",
+        userId: req.params.id,
+        documents: updated,  // Returning updated document details (can include message, etc.)
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to update message.",
+        error: error || "Unknown error",
       });
     }
   }

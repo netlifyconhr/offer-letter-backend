@@ -15,10 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BackgroundVarificationRoutes = void 0;
 const express_1 = require("express");
 const multer_1 = __importDefault(require("multer"));
+const multer_config_1 = __importDefault(require("../../config/multer.config"));
 const auth_1 = __importDefault(require("../../middleware/auth"));
 const user_interface_1 = require("../user/user.interface");
 const background_varification_controller_1 = require("./background-varification.controller");
-const multer_config_1 = __importDefault(require("../../config/multer.config"));
 const background_varification_model_1 = __importDefault(require("./background-varification.model"));
 const router = (0, express_1.Router)();
 const storage = multer_1.default.memoryStorage();
@@ -69,6 +69,31 @@ router.post("/upload-required-documents/:id", multer_config_1.default.fields([
             success: false,
             message: "Failed to upload documents.",
             error: "error?.message",
+        });
+    }
+}));
+router.delete("/upload-required-documents/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    try {
+        const updated = yield background_varification_model_1.default.findByIdAndUpdate(req.params.id, payload, { new: true });
+        if (!updated) {
+            return res.status(404).json({
+                success: false,
+                message: "Background verification record not found.",
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Message updated successfully.",
+            userId: req.params.id,
+            documents: updated, // Returning updated document details (can include message, etc.)
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to update message.",
+            error: error || "Unknown error",
         });
     }
 }));
