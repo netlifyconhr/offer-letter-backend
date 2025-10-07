@@ -54,40 +54,31 @@ const background_varification_service_1 = require("./background-varification.ser
 // paySlip.schema.ts
 const XLSX = __importStar(require("xlsx"));
 const zod_1 = require("zod");
-// Define Zod schema
-const paySlipSchema = zod_1.z.object({
+const backgroundVerificationSchema = zod_1.z.object({
     employeeName: zod_1.z.string().nonempty(),
     employeeId: zod_1.z.string().nonempty(),
-    month: zod_1.z.string().nonempty(),
-    year: zod_1.z.string().nonempty(),
     employeeDesignation: zod_1.z.string().nonempty(),
     employeeDepartment: zod_1.z.string().nonempty(),
-    employeeUAN: zod_1.z.string().optional(),
-    employeeESINO: zod_1.z.string().optional(),
-    basicSalary: zod_1.z.string().optional(),
-    houseRentAllowance: zod_1.z.string().optional(),
-    conveyanceAllowance: zod_1.z.string().optional(),
-    training: zod_1.z.string().optional(),
-    grossSalary: zod_1.z.string().optional(),
-    netPay: zod_1.z.string().optional(),
-    salaryOfEmployee: zod_1.z.string().optional(),
-    totalWorkingDays: zod_1.z.string().optional(),
-    totalPresentDays: zod_1.z.string().optional(),
-    totalAbsent: zod_1.z.string().optional(),
-    uninformedLeaves: zod_1.z.string().optional(),
-    halfDay: zod_1.z.string().optional(),
-    calculatedSalary: zod_1.z.string().optional(),
-    EPF: zod_1.z.string().optional(),
-    ESI: zod_1.z.string().optional(),
-    incentives: zod_1.z.string().optional(),
-    OT: zod_1.z.string().optional(),
-    professionalTax: zod_1.z.string().optional(),
-    totalDeductions: zod_1.z.string().optional(),
     employeeEmail: zod_1.z.string().email(),
     companyName: zod_1.z.string().nonempty(),
-    dateOfPayment: zod_1.z.string().optional(),
-    generateByUser: zod_1.z.string().optional(), // Can later be ObjectId
-    status: zod_1.z.enum(["PENDING", "SENT", "FAILED"]).optional(),
+    companyBranch: zod_1.z.string().nonempty(),
+    companyRegion: zod_1.z.string().nonempty(),
+    employeeGender: zod_1.z.string().nonempty(),
+    pan: zod_1.z.string().optional(),
+    aadharFront: zod_1.z.string().optional(),
+    aadharBack: zod_1.z.string().optional(),
+    experience: zod_1.z.string().optional(),
+    education: zod_1.z.string().optional(),
+    photo: zod_1.z.string().optional(),
+    educationStatus: zod_1.z.string().optional(),
+    experienceStatus: zod_1.z.string().optional(),
+    addressStatus: zod_1.z.string().optional(),
+    criminalStatus: zod_1.z.string().optional(),
+    panStatus: zod_1.z.string().optional(),
+    adharStatus: zod_1.z.string().optional(),
+    remarks: zod_1.z.string().optional(),
+    employeePhone: zod_1.z.string().optional(),
+    employeeDateOfJoin: zod_1.z.string().optional(), // consider z.coerce.date() if you want to parse it as Date
 });
 exports.backgroundVarificationController = {
     getBackgroundVarificationAll: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -138,7 +129,7 @@ exports.backgroundVarificationController = {
             // Validate and filter valid rows
             const validPaySlips = [];
             for (const row of rows) {
-                const result = paySlipSchema.safeParse(row);
+                const result = backgroundVerificationSchema.safeParse(row);
                 if (result.success) {
                     validPaySlips.push(result.data);
                 }

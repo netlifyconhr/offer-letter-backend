@@ -3,10 +3,10 @@ import { EmailHelper } from "../../utils/emailHelper";
 import { generatePayslipPDFWithPDFKit } from "../../utils/payslip";
 import { IJwtPayload } from "../auth/auth.interface";
 import { IEmailStatus } from "../release-letter/release-letter.interface";
-import { IPaySlip } from "./payslip.interface";
+import { PaySlipInput } from "./payslip.controller";
 import PaySlip from "./payslip.model";
 async function processOnePayslipLetter(
-  offerLetterData: IPaySlip,
+  offerLetterData: PaySlipInput,
   authUser: IJwtPayload
 ) {
   try {
@@ -103,7 +103,7 @@ export const payslipService = {
   },
 
   async createBulkOfferLetters(
-    offerLetters: IPaySlip[],
+    offerLetters: PaySlipInput[],
     authUser: IJwtPayload
   ) {
     const pLimit = (await import("p-limit")).default;

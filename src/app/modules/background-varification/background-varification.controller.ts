@@ -9,44 +9,37 @@ import * as XLSX from "xlsx";
 import { z } from "zod";
 
 
-// Define Zod schema
- const paySlipSchema = z.object({
+ const backgroundVerificationSchema = z.object({
   employeeName: z.string().nonempty(),
   employeeId: z.string().nonempty(),
-  month: z.string().nonempty(),
-  year: z.string().nonempty(),
   employeeDesignation: z.string().nonempty(),
   employeeDepartment: z.string().nonempty(),
-  employeeUAN: z.string().optional(),
-  employeeESINO: z.string().optional(),
-  basicSalary: z.string().optional(),
-  houseRentAllowance: z.string().optional(),
-  conveyanceAllowance: z.string().optional(),
-  training: z.string().optional(),
-  grossSalary: z.string().optional(),
-  netPay: z.string().optional(),
-  salaryOfEmployee: z.string().optional(),
-  totalWorkingDays: z.string().optional(),
-  totalPresentDays: z.string().optional(),
-  totalAbsent: z.string().optional(),
-  uninformedLeaves: z.string().optional(),
-  halfDay: z.string().optional(),
-  calculatedSalary: z.string().optional(),
-  EPF: z.string().optional(),
-  ESI: z.string().optional(),
-  incentives: z.string().optional(),
-  OT: z.string().optional(),
-  professionalTax: z.string().optional(),
-  totalDeductions: z.string().optional(),
   employeeEmail: z.string().email(),
   companyName: z.string().nonempty(),
-  dateOfPayment: z.string().optional(),
-  generateByUser: z.string().optional(), // Can later be ObjectId
-  status: z.enum(["PENDING", "SENT", "FAILED"]).optional(),
+  companyBranch: z.string().nonempty(),
+  companyRegion: z.string().nonempty(),
+  employeeGender: z.string().nonempty(),
+
+  pan: z.string().optional(),
+  aadharFront: z.string().optional(),
+  aadharBack: z.string().optional(),
+  experience: z.string().optional(),
+  education: z.string().optional(),
+  photo: z.string().optional(),
+  educationStatus: z.string().optional(),
+  experienceStatus: z.string().optional(),
+
+  addressStatus: z.string().optional(),
+  criminalStatus: z.string().optional(),
+  panStatus: z.string().optional(),
+  adharStatus: z.string().optional(),
+  remarks: z.string().optional(),
+  employeePhone: z.string().optional(),
+
+  employeeDateOfJoin: z.string().optional(), // consider z.coerce.date() if you want to parse it as Date
 });
 
-// Infer TypeScript type from schema
-export type PaySlipInput = z.infer<typeof paySlipSchema>;
+export type BackgroundVerificationInput = z.infer<typeof backgroundVerificationSchema>;
 
 export const backgroundVarificationController = {
   getBackgroundVarificationAll: catchAsync(async (req, res) => {
@@ -106,10 +99,10 @@ const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
 }) as Record<string, any>[];
 
 // Validate and filter valid rows
-const validPaySlips: PaySlipInput[] = [];
+const validPaySlips: BackgroundVerificationInput[] = [];
 
 for (const row of rows) {
-  const result = paySlipSchema.safeParse(row);
+  const result = backgroundVerificationSchema.safeParse(row);
   if (result.success) {
     validPaySlips.push(result.data);
   } else {

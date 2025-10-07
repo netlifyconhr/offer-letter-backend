@@ -1,8 +1,8 @@
 import PDFDocument from "pdfkit";
-import { IPaySlip } from "../../modules/payslip/payslip.interface";
+import { PaySlipInput } from "../../modules/payslip/payslip.controller";
 
 export async function generatePayslipPDFWithPDFKit(
-  payslip: IPaySlip
+  payslip: PaySlipInput
 ): Promise<Buffer> {
   return new Promise(async (resolve, reject) => {
     try {
@@ -247,7 +247,7 @@ export async function generatePayslipPDFWithPDFKit(
 }
 
 export async function generateBulkPayslipPDFs(
-  payslips: IPaySlip[]
+  payslips: PaySlipInput[]
 ): Promise<{ success: Buffer[]; failed: { index: number; error: any }[] }> {
   const results = {
     success: [] as Buffer[],
@@ -285,7 +285,7 @@ export async function generateBulkPayslipPDFs(
 
 // Helper function to save PDFs to files (Node.js environment)
 export async function saveBulkPDFsToFiles(
-  payslips: IPaySlip[],
+  payslips: PaySlipInput[],
   outputDir: string = "./payslips"
 ): Promise<{
   successFiles: string[];
