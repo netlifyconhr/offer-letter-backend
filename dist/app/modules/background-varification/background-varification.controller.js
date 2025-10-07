@@ -47,11 +47,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.backgroundVarificationController = void 0;
 const http_status_codes_1 = require("http-status-codes");
-const XLSX = __importStar(require("xlsx"));
 const appError_1 = __importDefault(require("../../errors/appError"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const background_varification_service_1 = require("./background-varification.service");
+// paySlip.schema.ts
+const XLSX = __importStar(require("xlsx"));
+const zod_1 = require("zod");
+// Define Zod schema
+const paySlipSchema = zod_1.z.object({
+    employeeName: zod_1.z.string().nonempty(),
+    employeeId: zod_1.z.string().nonempty(),
+    month: zod_1.z.string().nonempty(),
+    year: zod_1.z.string().nonempty(),
+    employeeDesignation: zod_1.z.string().nonempty(),
+    employeeDepartment: zod_1.z.string().nonempty(),
+    employeeUAN: zod_1.z.string().optional(),
+    employeeESINO: zod_1.z.string().optional(),
+    basicSalary: zod_1.z.string().optional(),
+    houseRentAllowance: zod_1.z.string().optional(),
+    conveyanceAllowance: zod_1.z.string().optional(),
+    training: zod_1.z.string().optional(),
+    grossSalary: zod_1.z.string().optional(),
+    netPay: zod_1.z.string().optional(),
+    salaryOfEmployee: zod_1.z.string().optional(),
+    totalWorkingDays: zod_1.z.string().optional(),
+    totalPresentDays: zod_1.z.string().optional(),
+    totalAbsent: zod_1.z.string().optional(),
+    uninformedLeaves: zod_1.z.string().optional(),
+    halfDay: zod_1.z.string().optional(),
+    calculatedSalary: zod_1.z.string().optional(),
+    EPF: zod_1.z.string().optional(),
+    ESI: zod_1.z.string().optional(),
+    incentives: zod_1.z.string().optional(),
+    OT: zod_1.z.string().optional(),
+    professionalTax: zod_1.z.string().optional(),
+    totalDeductions: zod_1.z.string().optional(),
+    employeeEmail: zod_1.z.string().email(),
+    companyName: zod_1.z.string().nonempty(),
+    dateOfPayment: zod_1.z.string().optional(),
+    generateByUser: zod_1.z.string().optional(), // Can later be ObjectId
+    status: zod_1.z.enum(["PENDING", "SENT", "FAILED"]).optional(),
+});
 exports.backgroundVarificationController = {
     getBackgroundVarificationAll: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield background_varification_service_1.backgroundVarificationService.getOfferLetterAll(req.query);
@@ -98,13 +135,23 @@ exports.backgroundVarificationController = {
                 defval: "",
                 raw: false,
             });
-            const filteredRows = rows.filter((it) => it.employeeEmail);
-            const results = yield background_varification_service_1.backgroundVarificationService.createBulkBackgroundVarificationData(filteredRows);
+            // Validate and filter valid rows
+            const validPaySlips = [];
+            for (const row of rows) {
+                const result = paySlipSchema.safeParse(row);
+                if (result.success) {
+                    validPaySlips.push(result.data);
+                }
+                else {
+                    console.warn("Invalid row skipped:", result.error.flatten().fieldErrors);
+                }
+            }
+            const result = yield background_varification_service_1.backgroundVarificationService.createBulkBackgroundVarificationData(validPaySlips);
             (0, sendResponse_1.default)(res, {
                 statusCode: http_status_codes_1.StatusCodes.OK,
                 success: true,
-                message: "Bulk employee data  processed for background varification!",
-                data: results,
+                message: "Bulk employee data processed for background verification!",
+                data: result,
             });
         });
     },

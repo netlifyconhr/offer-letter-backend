@@ -1,11 +1,52 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import * as XLSX from "xlsx";
 import AppError from "../../errors/appError";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { BackgroundVarificationType } from "./background-varification.interface";
 import { backgroundVarificationService } from "./background-varification.service";
+// paySlip.schema.ts
+import * as XLSX from "xlsx";
+import { z } from "zod";
+
+
+// Define Zod schema
+ const paySlipSchema = z.object({
+  employeeName: z.string().nonempty(),
+  employeeId: z.string().nonempty(),
+  month: z.string().nonempty(),
+  year: z.string().nonempty(),
+  employeeDesignation: z.string().nonempty(),
+  employeeDepartment: z.string().nonempty(),
+  employeeUAN: z.string().optional(),
+  employeeESINO: z.string().optional(),
+  basicSalary: z.string().optional(),
+  houseRentAllowance: z.string().optional(),
+  conveyanceAllowance: z.string().optional(),
+  training: z.string().optional(),
+  grossSalary: z.string().optional(),
+  netPay: z.string().optional(),
+  salaryOfEmployee: z.string().optional(),
+  totalWorkingDays: z.string().optional(),
+  totalPresentDays: z.string().optional(),
+  totalAbsent: z.string().optional(),
+  uninformedLeaves: z.string().optional(),
+  halfDay: z.string().optional(),
+  calculatedSalary: z.string().optional(),
+  EPF: z.string().optional(),
+  ESI: z.string().optional(),
+  incentives: z.string().optional(),
+  OT: z.string().optional(),
+  professionalTax: z.string().optional(),
+  totalDeductions: z.string().optional(),
+  employeeEmail: z.string().email(),
+  companyName: z.string().nonempty(),
+  dateOfPayment: z.string().optional(),
+  generateByUser: z.string().optional(), // Can later be ObjectId
+  status: z.enum(["PENDING", "SENT", "FAILED"]).optional(),
+});
+
+// Infer TypeScript type from schema
+export type PaySlipInput = z.infer<typeof paySlipSchema>;
 
 export const backgroundVarificationController = {
   getBackgroundVarificationAll: catchAsync(async (req, res) => {
@@ -51,31 +92,41 @@ export const backgroundVarificationController = {
         "Empty or invalid Excel file"
       );
     }
-    const workbook = XLSX.read(file.buffer, {
-      type: "buffer",
-      cellDates: true,
-    });
 
-    const sheetName = workbook.SheetNames[0];
+const workbook = XLSX.read(file.buffer, {
+  type: "buffer",
+  cellDates: true,
+});
 
-    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
-      defval: "",
-      raw: false,
-    }) as BackgroundVarificationType[];
+const sheetName = workbook.SheetNames[0];
 
-    const filteredRows = rows.filter(
-      (it: BackgroundVarificationType) => it.employeeEmail
-    );
-    const results =
-      await backgroundVarificationService.createBulkBackgroundVarificationData(
-        filteredRows
-      );
+const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+  defval: "",
+  raw: false,
+}) as Record<string, any>[];
 
-    sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      success: true,
-      message: "Bulk employee data  processed for background varification!",
-      data: results,
-    });
+// Validate and filter valid rows
+const validPaySlips: PaySlipInput[] = [];
+
+for (const row of rows) {
+  const result = paySlipSchema.safeParse(row);
+  if (result.success) {
+    validPaySlips.push(result.data);
+  } else {
+    console.warn("Invalid row skipped:", result.error.flatten().fieldErrors);
+  }
+}
+
+  const result = await backgroundVarificationService.createBulkBackgroundVarificationData(
+  validPaySlips
+);
+
+sendResponse(res, {
+  statusCode: StatusCodes.OK,
+  success: true,
+  message: "Bulk employee data processed for background verification!",
+  data: result,
+});
+
   },
 };

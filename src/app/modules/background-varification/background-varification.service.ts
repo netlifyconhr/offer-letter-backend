@@ -1,4 +1,5 @@
 import QueryBuilder from "../../builder/QueryBuilder";
+import { PaySlipInput } from "./background-varification.controller";
 import { BackgroundVarificationType } from "./background-varification.interface";
 import BackgroundVarification from "./background-varification.model";
 
@@ -58,7 +59,7 @@ export const backgroundVarificationService = {
   },
 
   async createBulkBackgroundVarificationData(
-    payload: BackgroundVarificationType[]
+    payload: PaySlipInput[]
   ) {
     const results = await BackgroundVarification.insertMany(payload);
 
