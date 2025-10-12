@@ -12,12 +12,12 @@ import { IJwtPayload } from "../auth/auth.interface";
 import { IEmailStatus } from "../release-letter/release-letter.interface";
 const paySlipSchema = z.object({
   employeeName: z.string().nonempty(),
-  employeeId: z.string().nonempty(),
-  month: z.string().nonempty(),
-  year: z.string().nonempty(),
+  employeeId: z.string().optional(),
+  month: z.string().optional(),
+  year: z.string().optional(),
 
-  employeeDesignation: z.string().nonempty(),
-  employeeDepartment: z.string().nonempty(),
+  employeeDesignation: z.string().optional(),
+  employeeDepartment: z.string().optional(),
 
   employeeUAN: z.string().optional(),
   employeeESINO: z.string().optional(),
@@ -43,8 +43,8 @@ const paySlipSchema = z.object({
   professionalTax: z.string().optional(),
   totalDeductions: z.string().optional(),
 
-  employeeEmail: z.string().email(),
-  companyName: z.string().nonempty(),
+  employeeEmail: z.string().nonempty(),
+  companyName: z.string().optional(),
   dateOfPayment: z.string().optional(), // or z.coerce.date()
 
   generateByUser: z.string().optional(), // You can validate ObjectId separately if needed

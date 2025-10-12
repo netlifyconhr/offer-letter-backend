@@ -58,7 +58,7 @@ const sendEmail = async (
       messageId: info.messageId,
     };
   } catch (error: any) {
-    console.error("Error sending email:", error.message || error);
+    console.error("Error sending email:",  error);
     return {
       status: IEmailStatus.FAILED,
       error: error.message || "Unknown error",
