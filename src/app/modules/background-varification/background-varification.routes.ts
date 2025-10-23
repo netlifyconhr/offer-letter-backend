@@ -134,4 +134,77 @@ router.get(
   backgroundVarificationController.getThisMonthPayslipCount
 );
 
+// router.get("/complete-verification-status", async (req, res) => {
+//   const employeeIds = [
+
+//     "WRAB5168",
+// "WRMS1306",
+// "WRSR9838",
+// "WRSJ2336",
+// "WRAB6181",
+// "WRAB7698",
+//     "WRAG2751",
+//     "WRAK4300",
+//     "WRAK4319",
+//     "WRAK7894",
+//     "WRAP0022",
+//     "WRAS0705",
+//     "WRAS7061",
+//     "WRAS9028",
+//     "WRAT9410",
+//     "WRDB9660",
+//     "WRIK1569",
+//     "WRJS4025",
+//     "WRKC5885",
+//     "WRKR5950",
+//     "WRMB9287",
+//     "WRMS2799",
+//     "WRNK9036",
+//     "WRNS7207",
+//     "WRPM1181",
+//     "WRPS3607",
+//     "WRPS3946",
+//     "WRSK2285",
+//     "WRSK9792",
+//     "WRSM1866",
+//     "WRSR2555",
+//     "WRSS9826",
+//     "WRUC1397",
+//     "WRVS5960",
+//     "WRZF9835",
+//     "WRPR8420",
+//     "WRAA3541",
+//     "WRAP3986",
+//     "WRM2365",
+//     "WRPD0040"
+//   ];
+
+//   try {
+//     const result = await BackgroundVarification.updateMany(
+//       { employeeId: { $in: employeeIds } },
+//       { $set: { verificationStatus: "completed" } }
+//     );
+
+//     if (result.modifiedCount === 0) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "No background verification records found for provided employee IDs.",
+//       });
+//     }
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Verification statuses updated successfully.",
+//       modifiedCount: result.modifiedCount,
+//     });
+//   } catch (error) {
+//     console.error("Error updating verification statuses:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to update verification statuses.",
+//       error: error.message || "Unknown error",
+//     });
+//   }
+// });
+
 export const BackgroundVarificationRoutes = router;

@@ -9,7 +9,7 @@ export const backgroundVarificationService = {
       BackgroundVarification.find(),
       query
     )
-      .search(["employeeName", "employeeEmail"])
+      .search(["employeeName", "employeeEmail","employeeId"])
       .filter()
       .sort()
       .paginate()

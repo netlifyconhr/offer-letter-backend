@@ -29,6 +29,7 @@ const BackgroundVarificationSchema = new Schema<BackgroundVarificationType>(
     panStatus: { type: String, default: "" },
     remarks: { type: String, default: "" },
     companyBranch: { type: String, default: "" },
+    verificationStatus: { type: String, default: "pending" ,enum:['pending','completed']},
   },
   { timestamps: true }
 );
