@@ -28,5 +28,6 @@ export interface BackgroundVarificationType extends Document {
   employeePhone: string;
   
   employeeDateOfJoin: string;
+  verificationStatus:"completed"|"pending"
 
 }
