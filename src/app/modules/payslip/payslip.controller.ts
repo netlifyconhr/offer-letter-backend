@@ -43,7 +43,7 @@ const paySlipSchema = z.object({
   professionalTax: z.string().optional(),
   totalDeductions: z.string().optional(),
 
-  employeeEmail: z.string().nonempty(),
+  employeeEmail: z.string().email().nonempty(),
   companyName: z.string().optional(),
   dateOfPayment: z.string().optional(), // or z.coerce.date()
 
